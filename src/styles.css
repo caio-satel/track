@@ -9,3 +9,18 @@ body {
 body {
   font-family: "Lato", sans-serif;
 }
+
+.snack-success {
+  background-color: #4caf50; /* Verde para sucesso */
+  color: white;
+}
+
+.snack-error {
+  background-color: #f44336; /* Vermelho para erro */
+  color: white;
+}
+
+.snack-warning {
+  background-color: #ff9800; /* Laranja para aviso */
+  color: white;
+}
