@@ -1,6 +1,6 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +11,7 @@ export class LoginComponent {
   loginCard = true;
 
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
     password: new FormControl('', [Validators.required])
   });
 
@@ -21,16 +21,26 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required])
   });
 
-  constructor() { }
+  constructor(private snackbar: SnackbarService) { }
 
   onSubmitLogin(): void {
-    console.log(this.loginForm.value);
-    this.loginForm.reset();
+    if (this.loginForm.invalid || !this.loginForm.value) {
+      this.snackbar.openSnackBar('Preencha todos os campos corretamente!', 'warning');
+    } else {
+      console.log(this.loginForm.value);
+      this.snackbar.openSnackBar('Login realizado com sucesso!', 'success');
+      this.loginForm.reset();
+    }
   }
 
   onSubmitRegister(): void {
-    console.log(this.registerForm.value);
-    this.registerForm.reset();
+    if (this.registerForm.invalid || !this.registerForm.value) {
+      this.snackbar.openSnackBar('Preencha todos os campos corretamente!', 'warning');
+    } else {
+      console.log(this.loginForm.value);
+      this.snackbar.openSnackBar('Cadastro realizado com sucesso!', 'success');
+      this.registerForm.reset();
+    }
   }
 
 }
