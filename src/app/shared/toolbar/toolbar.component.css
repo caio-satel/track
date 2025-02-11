@@ -1,0 +1,40 @@
+mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.logo {
+  height: 100%;
+}
+
+.logo img {
+  height: 100%;
+}
+
+.toolbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+}
+
+.toolbar-content a {
+  color: #111313;
+  text-decoration: none;
+}
+
+.toolbar-content a:hover {
+  color: #111313;
+  text-decoration: underline;
+}
+
+.toolbar-content a:active {
+  color: #111313;
+  text-decoration: underline;
+}
+
+button {
+  background-color: #111313;
+}

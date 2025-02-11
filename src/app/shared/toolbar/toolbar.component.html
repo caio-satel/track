@@ -1,0 +1,17 @@
+<mat-toolbar>
+  <a class="logo" routerLink="/dashboard">
+    <img src="../../../assets/logo-text/logo-text-black-cyan.svg" width="170" alt="Logo">
+  </a>
+
+  <mat-list class="toolbar-content">
+    <li><a routerLink="/users">Usuários</a></li>
+    <li><a routerLink="/projects">Projetos</a></li>
+    <li><a routerLink="/tasks">Tasks</a></li>
+    <li><a routerLink="/releases">Lançamentos</a></li>
+  </mat-list>
+
+  <button mat-fab extended="" color="primary" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Sair
+  </button>
+</mat-toolbar>
