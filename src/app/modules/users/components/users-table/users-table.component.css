@@ -1,0 +1,32 @@
+mat-card {
+  padding: 20px;
+}
+
+.actions-user {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mat-column-name {
+  flex: 0 0 100px;
+  max-width: 100px;
+}
+
+.mat-column-email {
+  flex: 0 0 100px;
+  max-width: 100px;
+}
+
+.mat-column-perfil {
+  flex: 0 0 100px;
+  max-width: 100px;
+}
+
+.mat-column-actions {
+  flex: 0 0 100px;
+  max-width: 100px;
+}
+
+.mat-column-actions button {
+  margin: 0 10px;
+}
