@@ -181,6 +181,18 @@ export class UsersTableComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // Função para editar um usuário
+  openEditDialog(user: UserDTO, enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(UsersFormComponent, {
+      width: '350px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: {
+        user
+      }
+    });
+  }
+
   // Função para abrir o dialog de confirmação
   openDeleteDialog(userId: number, enterAnimationDuration: string, exitAnimationDuration: string): void {
     // console.log('entrou na função', userId);

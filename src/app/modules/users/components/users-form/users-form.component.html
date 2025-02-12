@@ -1,5 +1,5 @@
 <mat-card class="mat-elevation-z8">
-  <mat-card-title>Novo Usuário</mat-card-title>
+  <mat-card-title>{{ data ? 'Editar Usuário' : 'Novo Usuário' }}</mat-card-title>
   <mat-card-content>
     <form [formGroup]="newUserForm" (ngSubmit)="addUser()">
       <mat-form-field>

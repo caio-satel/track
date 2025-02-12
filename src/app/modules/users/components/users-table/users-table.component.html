@@ -37,7 +37,7 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef> Ações </th>
       <td mat-cell *matCellDef="let users">
-        <button mat-mini-fab color="primary">
+        <button mat-mini-fab color="primary" (click)="openEditDialog(users, '200ms', '200ms')">
           <mat-icon fontIcon="edit"></mat-icon>
         </button>
         <button mat-mini-fab color="warn" (click)="openDeleteDialog(users.id, '200ms', '200ms')">
