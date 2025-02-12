@@ -40,7 +40,7 @@
         <button mat-mini-fab color="primary">
           <mat-icon fontIcon="edit"></mat-icon>
         </button>
-        <button mat-mini-fab color="warn">
+        <button mat-mini-fab color="warn" (click)="openDeleteDialog(users.id, '200ms', '200ms')">
           <mat-icon fontIcon="delete"></mat-icon>
         </button>
       </td>

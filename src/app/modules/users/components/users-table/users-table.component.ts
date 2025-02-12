@@ -6,6 +6,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { UsersFormComponent } from '../users-form/users-form.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
+import { SnackbarService } from '../../../../shared/snackbar/services/snackbar.service';
 
 
 @Component({
@@ -15,9 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class UsersTableComponent implements OnInit, AfterViewInit {
   // Injeções de dependência
-  constructor() {}
-
-  readonly dialog = inject(MatDialog);
+  constructor(private snackbar: SnackbarService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     // Aplica o filtro customizado
@@ -173,10 +173,49 @@ export class UsersTableComponent implements OnInit, AfterViewInit {
 
   // Função para abrir o dialog de criação de novo usuário
   openFormDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    // console.log('entrou na função form');
     this.dialog.open(UsersFormComponent, {
       width: '350px',
       enterAnimationDuration,
       exitAnimationDuration,
     });
   }
+
+  // Função para abrir o dialog de confirmação
+  openDeleteDialog(userId: number, enterAnimationDuration: string, exitAnimationDuration: string): void {
+    // console.log('entrou na função', userId);
+
+    // Busca o usuário na lista pelo ID
+    const user = this.users.find(u => u.id === userId);
+
+    if (!user) {
+      // Se o usuário não existir na lista, exibe uma mensagem de erro
+      this.snackbar.openSnackBar('Usuário não encontrado!', 'warning');
+    }
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Excluir Usuário',
+        message: `Tem certeza que deseja excluir ${user.name}?`, // Nome dinâmico
+        enterAnimationDuration,
+        exitAnimationDuration
+      }
+    });
+
+    // Se o usuário confirmar, chamamos a função de exclusão
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteUser(userId);
+      }
+    });
+  }
+
+  // Função para excluir um usuário
+  deleteUser(userId: number) {
+    // console.log('Usuário excluído:', userId);
+    this.snackbar.openSnackBar('Usuário excluído com sucesso!', 'success');
+    // Chamar o service para excluir o usuário no backend
+  }
+
 }

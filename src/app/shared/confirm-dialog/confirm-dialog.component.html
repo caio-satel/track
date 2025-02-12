@@ -1,0 +1,10 @@
+<mat-card class="mat-elevation-z8">
+  <mat-card-title>{{ data.title }}</mat-card-title>
+  <div class="div-content">
+    <p>{{ data.message }}</p>
+    <mat-card-actions>
+      <button mat-button (click)="onCancel()">Cancelar</button>
+      <button mat-raised-button color="warn" (click)="onConfirm()">Confirmar</button>
+    </mat-card-actions>
+  </div>
+</mat-card>

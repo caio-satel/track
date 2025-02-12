@@ -1,0 +1,11 @@
+mat-card {
+  padding: 10px 20px;
+}
+
+mat-card-actions {
+  padding: 0;
+}
+
+mat-card-actions button:first-child {
+  margin-right: 10px;
+}

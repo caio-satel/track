@@ -7,10 +7,14 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { MatDialogActions, MatDialogClose, MatDialogModule, MatDialogTitle } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
-    ToolbarComponent
+    ToolbarComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -19,10 +23,15 @@ import { MatListModule } from '@angular/material/list';
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
-    MatListModule
+    MatListModule,
+    MatDialogModule,
+    MatDialogTitle,
+    MatDialogActions,
+    MatDialogClose,
+    MatCardModule
   ],
   exports: [
-    ToolbarComponent
+    ToolbarComponent, ConfirmDialogComponent, MatDialogModule
   ]
 })
 export class SharedModule { }

@@ -26,7 +26,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   declarations: [
     UsersComponent,
     UsersTableComponent,
-    UsersFormComponent
+    UsersFormComponent,
   ],
   imports: [
     CommonModule,
