@@ -24,7 +24,11 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Perfil </th>
       <td mat-cell *matCellDef="let users">
         <mat-chip-set>
-          <mat-chip> {{users.perfil}} </mat-chip>
+          @if (users.perfil === 'ADMIN') {
+            <mat-chip class="admin-chip"> {{users.perfil}} </mat-chip>
+          } @else {
+            <mat-chip class="user-chip"> {{users.perfil}} </mat-chip>
+          }
         </mat-chip-set>
       </td>
     </ng-container>

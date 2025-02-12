@@ -30,3 +30,7 @@ mat-card {
 .mat-column-actions button {
   margin: 0 10px;
 }
+
+mat-chip.admin-chip {
+  background-color: #34d58f;
+}
