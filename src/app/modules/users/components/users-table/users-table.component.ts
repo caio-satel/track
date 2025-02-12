@@ -4,6 +4,8 @@ import { Perfil } from '../../../../models/enum/perfil.enum';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
+import { UsersFormComponent } from '../users-form/users-form.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -14,6 +16,8 @@ import { MatSort, Sort } from '@angular/material/sort';
 export class UsersTableComponent implements OnInit, AfterViewInit {
   // Injeções de dependência
   constructor() {}
+
+  readonly dialog = inject(MatDialog);
 
   ngOnInit(): void {
     // Aplica o filtro customizado
@@ -165,5 +169,14 @@ export class UsersTableComponent implements OnInit, AfterViewInit {
         data.perfil.toLowerCase().includes(lowerFilter)
       );
     };
+  }
+
+  // Função para abrir o dialog de criação de novo usuário
+  openFormDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(UsersFormComponent, {
+      width: '350px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
   }
 }

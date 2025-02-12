@@ -1,9 +1,9 @@
 <mat-card class="mat-elevation-z8">
   <div class="actions-user">
-    <button mat-raised-button color="accent">New User</button>
+    <button mat-raised-button color="accent" (click)="openFormDialog('200ms', '200ms')">New User</button>
     <mat-form-field appearance="outline">
       <mat-label>Procure</mat-label>
-      <input matInput placeholder="Nome/E-mail/Perfil" (input)="search($event)">
+      <input matInput placeholder="Nome, E-mail ou Perfil" (input)="search($event)">
     </mat-form-field>
   </div>
   <table mat-table [dataSource]="dataSource" matSort>

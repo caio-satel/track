@@ -1,0 +1,21 @@
+mat-card {
+  padding: 20px;
+}
+
+mat-card-title {
+  font-size: 1.5rem;
+  font-family: "Lato", sans-serif;
+  font-weight: 500;
+  color: #872edf;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+mat-card-actions button:first-child {
+  margin-right: 10px;
+}

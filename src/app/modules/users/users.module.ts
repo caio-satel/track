@@ -15,9 +15,12 @@ import { MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSortModule } from '@angular/material/sort';
+import { MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,8 @@ import { MatSortModule } from '@angular/material/sort';
     CommonModule,
     RouterModule.forChild(usersRoutes),
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatIconModule,
     MatToolbarModule,
     MatSidenavModule,
@@ -39,7 +44,13 @@ import { MatSortModule } from '@angular/material/sort';
     MatInputModule,
     MatFormFieldModule,
     MatChipsModule,
+    MatSelectModule,
     MatSortModule,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogTitle,
+    MatError,
     //SharedModule para compartilhar componentes
     SharedModule
 ]
