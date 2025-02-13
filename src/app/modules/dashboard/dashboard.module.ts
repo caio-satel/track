@@ -4,6 +4,10 @@ import { RouterModule } from "@angular/router";
 import { DashboardComponent } from "./components/dashboard.component";
 import { dashboardRoutes } from "./dashboard.routing";
 import { SharedModule } from "../../shared/shared.module";
+import { MatCardModule } from "@angular/material/card";
+import { MatListModule } from "@angular/material/list";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 
 @NgModule({
@@ -14,6 +18,10 @@ import { SharedModule } from "../../shared/shared.module";
     CommonModule,
     RouterModule,
     RouterModule.forChild(dashboardRoutes),
+    MatCardModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
     //SharedModule
     SharedModule,
 ]

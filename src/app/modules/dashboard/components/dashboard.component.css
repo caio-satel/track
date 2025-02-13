@@ -1,0 +1,63 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.dashboard {
+  width: 100%;
+  height: 100%;
+  padding: 20px 0;
+  background-color: #1e201f;
+}
+
+mat-card {
+  margin: 0 150px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #111313;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+mat-card-title {
+  font-family: "Mona Sans", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #FFF;
+}
+
+mat-card-title span {
+  font-weight: 300;
+}
+
+button.button-release {
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #98e5dd;
+}
+
+.card-content ul {
+  list-style: none;
+  padding: 0 20px;
+}
+
+.card-content ul li {
+  color: #a9b0ad;
+  font-size: 1.2rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+}
+
+.card-content ul li mat-icon {
+  color: #eeb48f;
+}
