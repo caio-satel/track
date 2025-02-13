@@ -1,8 +1,10 @@
 mat-toolbar {
+  background-color: #111313;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 70px;
+  padding: 0 150px;
 }
 
 .logo {
@@ -21,16 +23,14 @@ mat-toolbar {
 }
 
 .toolbar-content a {
-  color: #111313;
+  color: #FFF;
   text-decoration: none;
 }
 
 .toolbar-content a:hover {
-  color: #111313;
-  text-decoration: underline;
+  color: #eeb48f;
 }
 
-.toolbar-content a:active {
-  color: #111313;
-  text-decoration: underline;
+button.btn-logout {
+  background-color: #eeb48f;
 }

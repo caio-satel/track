@@ -1,6 +1,6 @@
 <mat-toolbar>
   <a class="logo" routerLink="/dashboard">
-    <img src="../../../assets/logo-text/logo-text-black-cyan.svg" width="170" alt="Logo">
+    <img src="../../../assets/logo-text/logo-text-white-cyan.svg" width="170" alt="Logo">
   </a>
 
   <mat-list class="toolbar-content">
@@ -10,7 +10,7 @@
     <li><a routerLink="/releases">Lançamentos</a></li>
   </mat-list>
 
-  <button mat-button (click)="logout()">
+  <button mat-button class="btn-logout" (click)="logout()">
     <mat-icon fontIcon="logout"></mat-icon>
     Sair
   </button>
