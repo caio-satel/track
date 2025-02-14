@@ -1,10 +1,16 @@
+:host {
+  display: block;
+  background-color: #111313;
+}
 mat-toolbar {
   background-color: #111313;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 70px;
-  padding: 0 150px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 0;
 }
 
 .logo {

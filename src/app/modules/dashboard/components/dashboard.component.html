@@ -1,19 +1,120 @@
 <app-toolbar></app-toolbar>
 <div class="dashboard">
-  <mat-card>
-    <div class="card-header">
-      <mat-card-title><span>Olá</span>, Caio!</mat-card-title>
-      <button mat-raised-button class="button-release">
-        Registrar lançamento
-        <mat-icon fontIcon="add"></mat-icon>
-      </button>
+  <div class="container-infos">
+    <div class="date-time">
+      <span *ngIf="currentDate"> {{ currentDate }}</span>
     </div>
 
-    <div class="card-content">
-      <ul class="list">
-        <li><mat-icon fontIcon="info"></mat-icon>Informações de projetos, atividades e carga horária em tempo real</li>
-        <li><mat-icon fontIcon="add_task"></mat-icon>Registro de atividades no dia a dia</li>
-      </ul>
+    <mat-card class="card-welcome">
+      <div class="card-header">
+        <mat-card-title><span>Olá</span>, Caio!</mat-card-title>
+        <button mat-raised-button class="button-release">
+          Registrar lançamento
+          <mat-icon fontIcon="add"></mat-icon>
+        </button>
+      </div>
+
+      <div class="card-content">
+        <ul class="list">
+          <li><mat-icon fontIcon="info"></mat-icon>Informações de projetos, atividades e carga horária em tempo real</li>
+          <li><mat-icon fontIcon="add_task"></mat-icon>Registro de atividades no dia a dia</li>
+        </ul>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="container-table-project">
+    <div>
+      <h1>Em andamento</h1>
+      <mat-expansion-panel *ngFor="let project of projects" (opened)="loadTasks(project.id)">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ project.name }}</mat-panel-title>
+          <mat-panel-description>
+            Contém {{ project.tasks?.length || 0 }} atividades
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <!-- Tabela com informações do Projeto -->
+        <table class="tbl-container" mat-table [dataSource]="[project]">
+          <!-- Nome do Projeto -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Nome </th>
+            <td mat-cell *matCellDef="let p"> {{ p.name }} </td>
+          </ng-container>
+
+          <!-- Data de Início -->
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef> Início </th>
+            <td mat-cell *matCellDef="let p"> {{ p.startDate | date:'dd/MM/yyyy' }} </td>
+          </ng-container>
+
+          <!-- Data de Término -->
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef> Término </th>
+            <td mat-cell *matCellDef="let p"> {{ p.endDate | date:'dd/MM/yyyy' }} </td>
+          </ng-container>
+
+          <!-- Status -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Status </th>
+            <td mat-cell *matCellDef="let p"> {{ p.status }} </td>
+          </ng-container>
+
+          <!-- Prioridade -->
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef> Prioridade </th>
+            <td mat-cell *matCellDef="let p"> {{ p.priority }} </td>
+          </ng-container>
+
+          <!-- Usuário Responsável -->
+          <ng-container matColumnDef="userResponsible">
+            <th mat-header-cell *matHeaderCellDef> Responsável </th>
+            <td mat-cell *matCellDef="let p"> {{ getUserName(p.userResponsibleId) }} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="projectColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: projectColumns;"></tr>
+        </table>
+
+        <!-- Tabela de Tasks -->
+        <h3>Atividades</h3>
+        <table class="tbl-container" mat-table [dataSource]="project.tasks">
+          <!-- Nome da Task -->
+          <ng-container matColumnDef="taskName">
+            <th mat-header-cell *matHeaderCellDef> Nome </th>
+            <td mat-cell *matCellDef="let task"> {{ task.name }} </td>
+          </ng-container>
+
+          <!-- Data de Início da Task -->
+          <ng-container matColumnDef="taskStartDate">
+            <th mat-header-cell *matHeaderCellDef> Início </th>
+            <td mat-cell *matCellDef="let task"> {{ task.startDate | date:'dd/MM/yyyy' }} </td>
+          </ng-container>
+
+          <!-- Data de Término da Task -->
+          <ng-container matColumnDef="taskEndDate">
+            <th mat-header-cell *matHeaderCellDef> Término </th>
+            <td mat-cell *matCellDef="let task"> {{ task.endDate | date:'dd/MM/yyyy' }} </td>
+          </ng-container>
+
+          <!-- Status da Task -->
+          <ng-container matColumnDef="taskStatus">
+            <th mat-header-cell *matHeaderCellDef> Status </th>
+            <td mat-cell *matCellDef="let task"> {{ task.status }} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="taskColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: taskColumns;"></tr>
+        </table>
+      </mat-expansion-panel>
     </div>
-  </mat-card>
+
+    <div>
+      <h1>Horas trabalhadas</h1>
+      <mat-card class="work-time">
+        <mat-icon fontIcon="more_time"></mat-icon>
+        <span>Total de horas trabalhadas: +30:00</span>
+      </mat-card>
+    </div>
+  </div>
 </div>

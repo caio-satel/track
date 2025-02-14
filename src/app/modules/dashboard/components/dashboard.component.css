@@ -1,20 +1,37 @@
 :host {
   display: block;
-  height: 100vh;
+  background-color: #1e201f;
+  padding-bottom: 800px;
 }
 
 .dashboard {
-  width: 100%;
+  width: 90%;
   height: 100%;
   padding: 20px 0;
+  margin: 0 auto;
   background-color: #1e201f;
 }
 
-mat-card {
-  margin: 0 150px;
+.date-time {
+  text-align: center;
+  width: 250px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #1e201f;
+  border: 1px solid #98e5dd;
+  margin-bottom: 20px;
+}
+
+.date-time span {
+  color: #fff;
+}
+
+.card-welcome {
   padding: 20px;
   border-radius: 10px;
-  background-color: #111313;
+  background: linear-gradient(135deg, #11131380 10%, #98e5dd84 50%, #eeb58f77 90%);
 }
 
 .card-header {
@@ -46,10 +63,11 @@ button.button-release {
 .card-content ul {
   list-style: none;
   padding: 0 20px;
+  margin-top: 25px;
 }
 
 .card-content ul li {
-  color: #a9b0ad;
+  color: #fff;
   font-size: 1.2rem;
   font-weight: 500;
   display: flex;
@@ -59,5 +77,66 @@ button.button-release {
 }
 
 .card-content ul li mat-icon {
-  color: #eeb48f;
+  color: #ac8064;
+}
+
+div.container-table-project {
+  margin: 4rem 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+
+h1 {
+  color: #FFF;
+  font-weight: 500;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+mat-expansion-panel {
+  background-color: #111313;
+  margin-bottom: 8px;
+}
+
+::ng-deep .mat-expansion-indicator::after {
+  color: #fff !important;
+}
+
+mat-panel-title,
+mat-panel-description,
+h3 {
+  color: #FFF;
+}
+
+.tbl-container {
+  border-collapse: collapse; /* Garante que as bordas não se fundam */
+  border-radius: 10px;
+  overflow: hidden;
+
+  background-color: #1e2222;
+}
+
+th {
+  color: #eeb58f;
+}
+
+td {
+  color: #FFF;
+}
+
+.work-time {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  background: linear-gradient(135deg, #11131380 70%, #98e5dd84 50%, #eeb58f77 90%);
+  color: #FFF;
+}
+
+.work-time mat-icon {
+  color: #eeb58f;
 }
