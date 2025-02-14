@@ -1,6 +1,6 @@
 :host {
   display: block;
-  background-color: #1e201f;
+  background-color: var(--bg-primary);
   padding-bottom: 800px;
 }
 
@@ -9,23 +9,74 @@
   height: 100%;
   padding: 20px 0;
   margin: 0 auto;
-  background-color: #1e201f;
+  background-color: var(--bg-primary);
 }
 
 .date-time {
   text-align: center;
-  width: 250px;
+  width: 270px;
   font-size: 1.2rem;
   font-weight: 500;
   padding: 10px;
   border-radius: 10px;
-  background-color: #1e201f;
-  border: 1px solid #98e5dd;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--secondary-color);
   margin-bottom: 20px;
 }
 
 .date-time span {
-  color: #fff;
+  color: var(--text-primary);
+}
+
+.card-infos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.switch-theme {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch-theme span {
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+#switch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: #1e201f;
+  cursor: pointer;
+}
+
+#switch mat-icon[fontIcon="dark_mode"] {
+  display: none;
+  color: var(--secondary-color);
+}
+
+#switch mat-icon {
+  font-size: 1.5rem;
+}
+
+#switch mat-icon[fontIcon="light_mode"] {
+  color: var(--primary-color);
+}
+
+.light-theme #switch mat-icon[fontIcon="light_mode"] {
+  display: none;
+}
+
+.light-theme #switch mat-icon[fontIcon="dark_mode"] {
+  display: block;
 }
 
 .card-welcome {
@@ -45,7 +96,7 @@ mat-card-title {
   font-family: "Mona Sans", sans-serif;
   font-size: 2.5rem;
   font-weight: 600;
-  color: #FFF;
+  color: var(--text-primary);
 }
 
 mat-card-title span {
@@ -57,7 +108,7 @@ button.button-release {
   font-weight: 500;
   padding: 20px;
   border-radius: 10px;
-  background-color: #98e5dd;
+  background-color: var(--secondary-color);
 }
 
 .card-content ul {
@@ -67,7 +118,7 @@ button.button-release {
 }
 
 .card-content ul li {
-  color: #fff;
+  color: var(--text-primary);
   font-size: 1.2rem;
   font-weight: 500;
   display: flex;
@@ -77,7 +128,7 @@ button.button-release {
 }
 
 .card-content ul li mat-icon {
-  color: #ac8064;
+  color: var(--primary-color);
 }
 
 div.container-table-project {
@@ -92,37 +143,37 @@ h1 {
   font-weight: 500;
   text-transform: uppercase;
   white-space: nowrap;
+  margin-bottom: 20px;
 }
 
 mat-expansion-panel {
-  background-color: #111313;
+  background-color: var(--bg-secondary);
   margin-bottom: 8px;
 }
 
 ::ng-deep .mat-expansion-indicator::after {
-  color: #fff !important;
+  color: var(--text-primary) !important;
 }
 
 mat-panel-title,
 mat-panel-description,
 h3 {
-  color: #FFF;
+  color: var(--text-primary);
 }
 
 .tbl-container {
   border-collapse: collapse; /* Garante que as bordas não se fundam */
   border-radius: 10px;
   overflow: hidden;
-
-  background-color: #1e2222;
+  background-color: var(--bg-tertiary);
 }
 
 th {
-  color: #eeb58f;
+  color: var(--primary-color);
 }
 
 td {
-  color: #FFF;
+  color: var(--text-primary);
 }
 
 .work-time {
@@ -138,5 +189,5 @@ td {
 }
 
 .work-time mat-icon {
-  color: #eeb58f;
+  color: var(--primary-color);
 }

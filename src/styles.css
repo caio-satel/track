@@ -1,11 +1,26 @@
-* {
-  font-family: "Mona Sans", sans-serif;
+:root {
+  --bg-primary: #1e201f;
+  --bg-secondary: #111313;
+  --bg-tertiary: #1e2222;
+  --primary-color: #eeb58f;
+  --secondary-color: #98e5dd;
+  --text-primary: #fff;
+  --text-secondary: #9fa6a4;
 }
 
-html,
-body {
+.light-theme {
+  --bg-primary: #ffffff !important;
+  --bg-secondary: #f4f4f4 !important;
+  --bg-tertiary: #e6e6e6 !important;
+  --primary-color: #eeb58f !important;
+  --secondary-color: #98e5dd !important;
+  --text-primary: #1e201f !important;
+  --text-secondary: #444b48 !important;
+}
+
+* {
+  font-family: "Mona Sans", sans-serif;
   box-sizing: border-box;
-  height: 100vh;
   margin: 0;
   padding: 0;
 }

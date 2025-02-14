@@ -1,9 +1,9 @@
 :host {
   display: block;
-  background-color: #111313;
+  background-color: var(--bg-secondary);
 }
 mat-toolbar {
-  background-color: #111313;
+  background-color: var(--bg-secondary);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,14 +29,14 @@ mat-toolbar {
 }
 
 .toolbar-content a {
-  color: #FFF;
+  color: var(--text-primary);
   text-decoration: none;
 }
 
 .toolbar-content a:hover {
-  color: #eeb48f;
+  color: var(--primary-color);
 }
 
 button.btn-logout {
-  background-color: #eeb48f;
+  background-color: var(--primary-color);
 }

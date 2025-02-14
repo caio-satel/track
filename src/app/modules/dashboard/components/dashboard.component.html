@@ -1,8 +1,18 @@
 <app-toolbar></app-toolbar>
 <div class="dashboard">
   <div class="container-infos">
-    <div class="date-time">
-      <span *ngIf="currentDate"> {{ currentDate }}</span>
+    <div class="card-infos">
+      <div class="date-time">
+        <span *ngIf="currentDate"> {{ currentDate }}</span>
+      </div>
+
+      <div class="switch-theme">
+        <span>Mude seu tema:</span>
+        <button id="switch">
+          <mat-icon fontIcon="light_mode"></mat-icon>
+          <mat-icon fontIcon="dark_mode"></mat-icon>
+        </button>
+      </div>
     </div>
 
     <mat-card class="card-welcome">
