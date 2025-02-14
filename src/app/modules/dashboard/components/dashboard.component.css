@@ -20,7 +20,7 @@
   padding: 10px;
   border-radius: 10px;
   background-color: var(--bg-primary);
-  border: 1px solid var(--secondary-color);
+  border: 1px solid var(--primary-color);
   margin-bottom: 20px;
 }
 
@@ -79,6 +79,10 @@
   background: linear-gradient(135deg, #11131380 10%, #98e5dd84 50%, #eeb58f77 90%);
 }
 
+::ng-deep .light-theme .card-welcome {
+  background: linear-gradient(135deg,#eeb58f77 10%, #98e5dd84 50%, #f7f7f7 90%);
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -105,6 +109,11 @@ button.button-release {
   background-color: var(--secondary-color);
 }
 
+::ng-deep.light-theme .button-release {
+  background-color: #111313 !important;
+  color: var(--secondary-color) !important;
+}
+
 .card-content ul {
   list-style: none;
   padding: 0 20px;
@@ -122,7 +131,7 @@ button.button-release {
 }
 
 .card-content ul li mat-icon {
-  color: var(--primary-color);
+  color: var(--text-secondary);
 }
 
 div.container-table-project {
@@ -133,7 +142,7 @@ div.container-table-project {
 }
 
 h1 {
-  color: #FFF;
+  color: var(--text-primary);
   font-weight: 500;
   text-transform: uppercase;
   white-space: nowrap;
@@ -143,6 +152,10 @@ h1 {
 mat-expansion-panel {
   background-color: var(--bg-secondary);
   margin-bottom: 8px;
+}
+
+::ng-deep .light-theme mat-expansion-panel {
+  background-color: var(--bg-tertiary) !important;
 }
 
 ::ng-deep .mat-expansion-indicator::after {
@@ -155,19 +168,41 @@ h3 {
   color: var(--text-primary);
 }
 
+mat-panel-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+mat-panel-description {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+h3 {
+  margin: 20px 10px;
+}
+
 .tbl-container {
   border-collapse: collapse; /* Garante que as bordas não se fundam */
   border-radius: 10px;
   overflow: hidden;
-  background-color: var(--bg-tertiary);
+  background-color: var(--bg-primary);
+}
+
+::ng-deep .light-theme .tbl-container {
+  background-color: var(--text-primary) !important;
 }
 
 th {
-  color: var(--primary-color);
+  color: var(--secondary-color);
 }
 
 td {
   color: var(--text-primary);
+}
+
+::ng-deep .light-theme td {
+  color: var(--bg-secondary) !important;
 }
 
 .work-time {
@@ -182,6 +217,14 @@ td {
   color: #FFF;
 }
 
+::ng-deep .light-theme .work-time span {
+  color: var(--text-primary) !important;
+}
+
 .work-time mat-icon {
   color: var(--primary-color);
+}
+
+::ng-deep .light-theme .work-time mat-icon {
+  color: var(--text-primary) !important;
 }

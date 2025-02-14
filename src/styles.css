@@ -9,8 +9,8 @@
 }
 
 .light-theme {
-  --bg-primary: #ffffff !important;
-  --bg-secondary: #f4f4f4 !important;
+  --bg-primary: #f7f7f7 !important;
+  --bg-secondary: #ffffff !important;
   --bg-tertiary: #e6e6e6 !important;
   --primary-color: #eeb58f !important;
   --secondary-color: #98e5dd !important;
