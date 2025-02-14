@@ -8,9 +8,9 @@
 
       <div class="switch-theme">
         <span>Mude seu tema:</span>
-        <button id="switch">
-          <mat-icon fontIcon="light_mode"></mat-icon>
-          <mat-icon fontIcon="dark_mode"></mat-icon>
+        <button class="switch" (click)="toggleTheme()">
+          <mat-icon *ngIf="!isLightTheme" fontIcon="light_mode"></mat-icon>
+          <mat-icon *ngIf="isLightTheme" fontIcon="dark_mode"></mat-icon>
         </button>
       </div>
     </div>

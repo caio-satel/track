@@ -3,6 +3,7 @@ import { Project } from '../../../models/projects/project';
 import { StatusProject } from '../../../models/enum/statusProject.enum';
 import { Priority } from '../../../models/enum/priority.enum';
 import { StatusTask } from '../../../models/enum/statusTask.enum';
+import { ThemeServiceService } from '../../../services/theme-service/theme-service.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,12 +14,19 @@ export class DashboardComponent implements OnInit {
   projects: Project[] = []; // Lista de projetos
   projectColumns: string[] = ['name', 'startDate', 'endDate', 'status', 'priority', 'userResponsible'];
   taskColumns: string[] = ['taskName', 'taskStartDate', 'taskEndDate', 'taskStatus'];
+  isLightTheme = false;
 
   currentDate: string = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
   });
 
-  constructor() {}
+  constructor(private themeService: ThemeServiceService) { }
+
+  // Chama o serviço e alterna o tema (light ou dark)
+  toggleTheme() {
+    this.isLightTheme = !this.isLightTheme;
+    this.themeService.toggleTheme();
+  }
 
   ngOnInit() {
     this.updateTime(); // Data/Mês na inicialização do componente Dashboard

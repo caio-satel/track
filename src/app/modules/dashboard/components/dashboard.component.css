@@ -46,7 +46,7 @@
   font-weight: 400;
 }
 
-#switch {
+.switch {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,25 +58,16 @@
   cursor: pointer;
 }
 
-#switch mat-icon[fontIcon="dark_mode"] {
-  display: none;
-  color: var(--secondary-color);
-}
-
-#switch mat-icon {
+.switch mat-icon {
   font-size: 1.5rem;
 }
 
-#switch mat-icon[fontIcon="light_mode"] {
+.switch mat-icon[fontIcon="dark_mode"] {
+  color: var(--secondary-color);
+}
+
+.switch mat-icon[fontIcon="light_mode"] {
   color: var(--primary-color);
-}
-
-.light-theme #switch mat-icon[fontIcon="light_mode"] {
-  display: none;
-}
-
-.light-theme #switch mat-icon[fontIcon="dark_mode"] {
-  display: block;
 }
 
 .card-welcome {
