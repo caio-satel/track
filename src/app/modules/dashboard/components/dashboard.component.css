@@ -54,8 +54,11 @@
   height: 40px;
   border: none;
   border-radius: 50%;
-  background-color: #1e201f;
   cursor: pointer;
+}
+
+::ng-deep .light-theme .switch {
+  background-color: var(--text-primary) !important;
 }
 
 .switch mat-icon {

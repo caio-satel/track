@@ -1,34 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Project } from '../../../models/projects/project';
 import { StatusProject } from '../../../models/enum/statusProject.enum';
 import { Priority } from '../../../models/enum/priority.enum';
 import { StatusTask } from '../../../models/enum/statusTask.enum';
-import { ThemeServiceService } from '../../../services/theme-service/theme-service.service';
+import { ThemeService } from '../../../services/theme-service/theme-service.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   projects: Project[] = []; // Lista de projetos
   projectColumns: string[] = ['name', 'startDate', 'endDate', 'status', 'priority', 'userResponsible'];
   taskColumns: string[] = ['taskName', 'taskStartDate', 'taskEndDate', 'taskStatus'];
-  isLightTheme = false;
+
+  isLightTheme: boolean = false;  // Para armazenar o estado do tema
+  private destroy$ = new Subject<void>();
 
   currentDate: string = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
   });
 
-  constructor(private themeService: ThemeServiceService) { }
-
-  // Chama o serviço e alterna o tema (light ou dark)
-  toggleTheme() {
-    this.isLightTheme = !this.isLightTheme;
-    this.themeService.toggleTheme();
-  }
+  constructor(private themeService: ThemeService) { }
 
   ngOnInit() {
+    this.subscribeTheme(); // Inscrever no Observable do ThemeService
     this.updateTime(); // Data/Mês na inicialização do componente Dashboard
     this.loadProjects(); // Mockup de dados
     // Chamar o service de projetos para atualizar a lista de projetos e suas tasks
@@ -76,7 +74,7 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  //
+  // Função exemplo - implementar com back
   getUserName(userId: number): string {
     // Simulação de busca de usuário (substituir por API real)
     const users = [
@@ -104,4 +102,22 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // Se inscrever no Observable do ThemeService, será notificado sempre que o tema mudar
+  subscribeTheme(): void {
+    this.themeService.isLightTheme$
+      .pipe(takeUntil(this.destroy$))  // A inscrição será descartada quando destroy$ emitir
+      .subscribe(theme => {
+        this.isLightTheme = theme;  // Atualiza o valor de isLightTheme
+      });
+  }
+
+  // Alterna o tema chamando o serviço de ThemeService
+  toggleTheme() {
+    this.themeService.toggleTheme(); // Chama o serviço para alternar o tema
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

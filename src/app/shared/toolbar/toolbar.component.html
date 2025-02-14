@@ -1,6 +1,10 @@
 <mat-toolbar>
   <a class="logo" routerLink="/dashboard">
-    <img src="../../../assets/logo-text/logo-text-white-cyan.svg" width="170" alt="Logo">
+    @if (!isLightTheme) {
+      <img src="../../../assets/logo-text/logo-text-white-cyan.svg" width="170" alt="Logo Trackhours branco">
+    } @else {
+      <img src="../../../assets/logo-text/logo-text-black-orange.svg" width="170" alt="Logo Trackhours preto">
+    }
   </a>
 
   <mat-list class="toolbar-content">

@@ -1,12 +1,16 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ThemeServiceService {
+export class ThemeService {
   private renderer: Renderer2;
-  private isLightTheme = false;
+  // BehaviorSubject para armazenar e emitir qual tema será usado, assim é possível 'escutar' as mudanças em outros componentes
+  private isLightThemeSubject = new BehaviorSubject<boolean>(false);
+  // Observable para os demais componentes se inscreverem e receberem a alteração
+  isLightTheme$ = this.isLightThemeSubject.asObservable();
 
   constructor(
     // Renderer2 é usado para aplicar a classe CSS no DOM, evitando a manipulação do DOM diretamente
@@ -17,34 +21,29 @@ export class ThemeServiceService {
     // Para verificar se está no browser, e executar o código apenas quando estiver no navegador
     @Inject(PLATFORM_ID) private platformId: object
   ) {
-
-    // Verifica se o tema salvo é light mode
-    if (typeof window !== 'undefined') {
-      this.isLightTheme = localStorage.getItem('light-theme') === 'active';
-    }
-    
     this.renderer = rendererFactory.createRenderer(null, null);
 
     if (isPlatformBrowser(this.platformId)) {
-      this.isLightTheme = localStorage.getItem('light-theme') === 'active';
+      this.isLightThemeSubject.next(localStorage.getItem('light-theme') === 'active');
       this.applyTheme();
     }
   }
 
   // Alterna o tema (light ou dark)
   toggleTheme() {
-    this.isLightTheme = !this.isLightTheme;
+    const newTheme = !this.isLightThemeSubject.value;  // Inverte o tema
+    this.isLightThemeSubject.next(newTheme);  // Atualiza o BehaviorSubject
 
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('light-theme', this.isLightTheme ? 'active' : 'inactive');
+      localStorage.setItem('light-theme', newTheme ? 'active' : 'inactive');
       this.applyTheme();
     }
   }
 
-  // Aplica a classe CSS no DOM
-  private applyTheme() {
+  // Aplica/Remove a classe CSS no DOM
+  applyTheme() {
     if (isPlatformBrowser(this.platformId)) {
-      if (this.isLightTheme) {
+      if (this.isLightThemeSubject.value) {
         this.renderer.addClass(this.document.body, 'light-theme');
       } else {
         this.renderer.removeClass(this.document.body, 'light-theme');
