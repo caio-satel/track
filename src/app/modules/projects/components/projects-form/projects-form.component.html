@@ -13,10 +13,10 @@
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Selecione a data de Início e Término</mat-label>
+        <mat-label>Data de Início e Término</mat-label>
         <mat-date-range-input [formGroup]="newProjectForm" [rangePicker]="picker">
-          <input matStartDate formControlName="startDate" placeholder="Data de Início">
-          <input matEndDate formControlName="endDate" placeholder="Data de Término">
+          <input matStartDate formControlName="startDate" placeholder="Data de Início" required>
+          <input matEndDate formControlName="endDate" placeholder="Data de Término" required>
         </mat-date-range-input>
         <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -31,16 +31,6 @@
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label for="password">Senha</mat-label>
-        <input matInput type="password" id="password" name="password" formControlName="password" required>
-        @if (newProjectForm.get('password')?.hasError('required')) {
-          <mat-error>Senha é obrigatória</mat-error>
-        } @else {
-          <mat-error>Senha deve conter pelo menos 6 caracteres</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field>
         <mat-label>Usuario Responsável</mat-label>
         <mat-select name="userResponsibleId" formControlName="userResponsibleId">
           @for (user of users; track users) {
@@ -50,7 +40,7 @@
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label for="priority">Perfil</mat-label>
+        <mat-label for="priority">Prioridade</mat-label>
         <mat-select formControlName="priority">
           <mat-option value="HIGH">Alta</mat-option>
           <mat-option value="MEDIUM">Média</mat-option>
