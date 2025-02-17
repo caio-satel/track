@@ -1,20 +1,18 @@
-.box {
-  background-color: #292e2e;
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+:host {
+  display: block;
+  background-color: var(--bg-primary);
+  padding-bottom: 800px; /* Posteriormente retirar, apenas para developed */
+}
+
+.container-table {
+  width: 90%;
+  margin: 40px auto;
+  background-color: var(--bg-primary);
 }
 
 h1 {
   font-size: 1.5rem;
   font-weight: 400;
-  color: #FFF;
-}
-
-.box-content {
-  width: 70%;
-  height: calc(100% - 50px);
+  color: #fff;  /* Posteriormente alterar para variavel do tema */
+  margin: 20px 0;
 }
