@@ -24,8 +24,16 @@ th {
   color: var(--secondary-color);
 }
 
+::ng-deep .light-theme th {
+  color: var(--text-primary) !important;
+}
+
 td {
   color: var(--text-primary);
+}
+
+::ng-deep .light-theme td {
+  color: var(--text-secondary) !important;
 }
 
 .button-edit {

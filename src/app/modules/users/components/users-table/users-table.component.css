@@ -1,5 +1,7 @@
 mat-card {
+  background-color: var(--bg-secondary);
   padding: 20px;
+  border-radius: 10px;
 }
 
 .actions-user {
@@ -7,28 +9,42 @@ mat-card {
   justify-content: space-between;
 }
 
-.mat-column-name {
-  flex: 0 0 100px;
-  max-width: 100px;
+button.button-add {
+  border-radius: 10px;
+  background-color: var(--secondary-color);
 }
 
-.mat-column-email {
-  flex: 0 0 100px;
-  max-width: 100px;
+.tbl-container {
+  background-color: var(--bg-primary);
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
 }
 
-.mat-column-perfil {
-  flex: 0 0 100px;
-  max-width: 100px;
+th {
+  color: var(--secondary-color);
 }
 
-.mat-column-actions {
-  flex: 0 0 100px;
-  max-width: 100px;
+td {
+  color: var(--text-primary);
 }
 
-.mat-column-actions button {
-  margin: 0 10px;
+::ng-deep .light-theme th {
+  color: var(--text-primary) !important;
+}
+
+::ng-deep .light-theme td {
+  color: var(--text-secondary) !important;
+}
+
+.button-edit {
+  background-color: var(--primary-color);
+  margin-right: 10px;
+}
+
+mat-paginator {
+  border-radius: 0 0 10px 10px;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 }
 
 mat-chip.admin-chip {

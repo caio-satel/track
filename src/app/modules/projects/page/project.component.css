@@ -15,4 +15,5 @@ h1 {
   font-weight: 400;
   color: #fff;  /* Posteriormente alterar para variavel do tema */
   margin: 20px 0;
+  color: var(--text-primary);
 }
