@@ -16,7 +16,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -38,6 +40,10 @@ import { MatButtonModule } from '@angular/material/button';
     MatTableModule,
     MatSortModule,
     MatDialogModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
     // SharedModule
     SharedModule
   ]

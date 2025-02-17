@@ -7,6 +7,6 @@ export  interface ProjectDTO {
   startDate: Date;
   endDate: Date;
   userResponsibleId: number;
-  status: StatusProject;
+  status?: StatusProject;
   priority: Priority;
 }
