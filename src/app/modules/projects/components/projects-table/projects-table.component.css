@@ -1,0 +1,67 @@
+mat-card {
+  background-color: var(--bg-secondary);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.actions-projects {
+  display: flex;
+  justify-content: space-between;
+}
+
+button.button-add{
+  border-radius: 10px;
+  background-color: var(--secondary-color);
+}
+
+.tbl-container {
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+}
+
+th {
+  color: var(--secondary-color);
+}
+
+td {
+  color: var(--text-primary);
+}
+
+.button-edit {
+  background-color: var(--primary-color);
+  margin-right: 10px;
+}
+
+mat-paginator {
+  border-radius: 0 0 10px 10px;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+mat-chip.white-text {
+  color: var(--text-primary);
+}
+
+/* Chip Colors */
+mat-chip.high-chip,
+mat-chip.cancelled-chip {
+  background-color: #df4d4d;
+}
+
+mat-chip.medium-chip {
+  background-color: #ffb74d;
+}
+
+mat-chip.low-chip,
+mat-chip.planned-chip {
+  background-color: #008cff;
+}
+
+mat-chip.progress-chip {
+  background-color: #488599;
+}
+
+mat-chip.other-chip {
+  background-color: #00ff95;
+}

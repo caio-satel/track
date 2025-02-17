@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  background-color: var(--bg-primary);
+  padding-bottom: 800px; /* Posteriormente retirar, apenas para developed */
+}
+
+.container-table {
+  width: 90%;
+  margin: 40px auto;
+  background-color: var(--bg-primary);
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #fff;  /* Posteriormente alterar para variavel do tema */
+  margin: 20px 0;
+}
