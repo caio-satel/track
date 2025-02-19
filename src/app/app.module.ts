@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { MatDialogModule } from '@angular/material/dialog';
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch())
+    provideHttpClient(withFetch()),
+    [{provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}] // Configuração do locale do datepicker para o Brasil
   ],
   bootstrap: [AppComponent]
 })
