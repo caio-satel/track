@@ -1,10 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Project } from '../../../models/projects/project';
 import { StatusProject } from '../../../models/enum/statusProject.enum';
 import { Priority } from '../../../models/enum/priority.enum';
 import { StatusTask } from '../../../models/enum/statusTask.enum';
 import { ThemeService } from '../../../services/theme-service/theme-service.service';
 import { Subject, takeUntil } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { ReleasesFormComponent } from '../../releases/components/releases-form/releases-form.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,10 +14,10 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  dialog: MatDialog = inject(MatDialog);
   projects: Project[] = []; // Lista de projetos
   projectColumns: string[] = ['name', 'startDate', 'endDate', 'status', 'priority', 'userResponsible'];
   taskColumns: string[] = ['taskName', 'taskStartDate', 'taskEndDate', 'taskStatus'];
-
   isLightTheme: boolean = false;  // Para armazenar o estado do tema
   private destroy$ = new Subject<void>();
 
@@ -100,6 +102,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
         ];
       }, 1000); // Simula um delay de 1 segundo para carregar as tasks
     }
+  }
+
+  // Função para registrar um lançamento
+  registerRelease(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(ReleasesFormComponent, {
+      width: '350px',
+      enterAnimationDuration,
+      exitAnimationDuration
+    });
   }
 
   // Se inscrever no Observable do ThemeService, será notificado sempre que o tema mudar
