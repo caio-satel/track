@@ -1,1 +1,49 @@
-<p>releases-form works!</p>
+<mat-card class="mat-elevation-z8">
+  <mat-card-title>{{ data ? 'Editar Release' : 'Nova Release' }}</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="newReleaseForm" (ngSubmit)="addRelease()">
+      <mat-form-field>
+        <mat-label>Descrição</mat-label>
+        <input matInput name="description" formControlName="description" required>
+        @if (newReleaseForm.get('description')?.hasError('required')) {
+          <mat-error>O campo descrição é obrigatório</mat-error>
+        } @else {
+          <mat-error>Descrição deve conter pelo menos 10 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Atividade Correspondente</mat-label>
+        <mat-select name="taskId" formControlName="taskId">
+          @for (task of tasks; track tasks) {
+            <mat-option [value]="task.name">{{ task.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Usuario Responsável</mat-label>
+        <mat-select name="userId" formControlName="userId">
+          @for (user of users; track users) {
+            <mat-option [value]="user.name">{{ user.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Início</mat-label>
+        <input matInput type="time" name="startDate" formControlName="startDate" required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Término</mat-label>
+        <input matInput type="time" name="endDate" formControlName="endDate" required>
+      </mat-form-field>
+
+      <mat-card-actions>
+        <button mat-button color="warn" (click)="closeDialog()">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit">Salvar</button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -6,9 +6,9 @@ import { ReleasesFormComponent } from './components/releases-form/releases-form.
 import { RouterModule } from '@angular/router';
 import { releasesRoutes } from './releases.routing';
 import { SharedModule } from '../../shared/shared.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -31,13 +31,14 @@ import { MatSortModule } from '@angular/material/sort';
     CommonModule,
     RouterModule.forChild(releasesRoutes),
     FormsModule,
+    ReactiveFormsModule,
     MatNativeDateModule,
     MatTableModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatSelect,
+    MatSelectModule,
     MatButtonModule,
     MatChipsModule,
     MatPaginatorModule,
