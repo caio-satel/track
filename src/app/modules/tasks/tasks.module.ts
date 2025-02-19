@@ -15,6 +15,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule, MatDateRangeInput } from '@angular/material/datepicker';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 
@@ -27,8 +31,14 @@ import { MatInputModule } from '@angular/material/input';
   imports: [
     CommonModule,
     RouterModule.forChild(tasksRoutes),
+    FormsModule,
+    ReactiveFormsModule,
+    MatNativeDateModule,
     MatCardModule,
     MatFormFieldModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatDateRangeInput,
     MatTableModule,
     MatInputModule,
     MatSortModule,

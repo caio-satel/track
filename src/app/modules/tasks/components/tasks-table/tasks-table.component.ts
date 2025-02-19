@@ -105,6 +105,7 @@ export class TasksTableComponent {
 
   // Função para editar uma atividade
   openEditDialog(task: TaskDTO, enterAnimationDuration: string, exitAnimationDuration: string): void {
+    console.log(task);
     this.dialog.open(TasksFormComponent, {
       width: '350px',
       enterAnimationDuration,
