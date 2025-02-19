@@ -213,12 +213,12 @@ td {
   padding: 20px;
   font-size: 1.2rem;
   font-weight: 500;
-  background: linear-gradient(135deg, #11131380 70%, #98e5dd84 50%, #eeb58f77 90%);
+  background: linear-gradient(135deg, #111313 70%, #98e5dd84 50%, #eeb58f77 90%);
   color: #FFF;
 }
 
 ::ng-deep .light-theme .work-time span {
-  color: var(--text-primary) !important;
+  color: var(--bg-primary) !important;
 }
 
 .work-time mat-icon {
@@ -226,5 +226,42 @@ td {
 }
 
 ::ng-deep .light-theme .work-time mat-icon {
-  color: var(--text-primary) !important;
+  color: var(--bg-tertiary) !important;
+}
+
+.table-releases mat-card {
+  background-color: var(--bg-tertiary);
+  border-radius: 10px;
+}
+
+.table-releases .actions-user {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  border-radius: 10px 10px 0 0;
+  background-color: var(--bg-secondary);
+}
+
+.table-releases .actions-user button {
+  background-color: var(--secondary-color);
+}
+
+.table-releases .tbl-container {
+  background-color: var(--bg-primary);
+  border-radius: 0px;
+}
+
+.table-releases .tbl-container .button-edit {
+  background-color: var(--primary-color);
+  margin-right: 10px;
+}
+
+.table-releases mat-paginator {
+  border-radius: 0 0 10px 10px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+::ng-deep .light-theme .table-releases mat-paginator  {
+  background-color: var(--bg-tertiary) !important;
 }

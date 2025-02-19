@@ -10,6 +10,12 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatTableModule } from "@angular/material/table";
+import { ReleasesTableComponent } from "../releases/components/releases-table/releases-table.component";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
+import { FormsModule } from "@angular/forms";
+import { MatInputModule } from "@angular/material/input";
 
 
 @NgModule({
@@ -20,12 +26,18 @@ import { MatTableModule } from "@angular/material/table";
     CommonModule,
     RouterModule,
     RouterModule.forChild(dashboardRoutes),
+    FormsModule,
     MatCardModule,
     MatListModule,
     MatIconModule,
     MatButtonModule,
     MatExpansionModule,
     MatTableModule,
+    MatFormFieldModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatIconModule,
+    MatInputModule,
     //SharedModule
     SharedModule,
 ]

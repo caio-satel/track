@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Project } from '../../../models/projects/project';
 import { StatusProject } from '../../../models/enum/statusProject.enum';
 import { Priority } from '../../../models/enum/priority.enum';
@@ -7,6 +7,12 @@ import { ThemeService } from '../../../services/theme-service/theme-service.serv
 import { Subject, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ReleasesFormComponent } from '../../releases/components/releases-form/releases-form.component';
+import { ReleaseDTO } from '../../../DTO/releases/releaseDTO';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { SnackbarService } from '../../../shared/snackbar/services/snackbar.service';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,15 +21,49 @@ import { ReleasesFormComponent } from '../../releases/components/releases-form/r
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   dialog: MatDialog = inject(MatDialog);
+  snackbar: SnackbarService = inject(SnackbarService);
   projects: Project[] = []; // Lista de projetos
   projectColumns: string[] = ['name', 'startDate', 'endDate', 'status', 'priority', 'userResponsible'];
   taskColumns: string[] = ['taskName', 'taskStartDate', 'taskEndDate', 'taskStatus'];
+  columns: string[] = ['taskId', 'description', 'startDate', 'endDate', 'actions'];
   isLightTheme: boolean = false;  // Para armazenar o estado do tema
   private destroy$ = new Subject<void>();
-
   currentDate: string = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
   });
+  releases: ReleaseDTO[] = [  // Mock de dados
+    {
+      taskId: 1,
+      description: 'Release Teste',
+      startDate: new Date('2021-01-01'),
+      endDate: new Date('2021-12-31'),
+    },
+    {
+      taskId: 2,
+      description: 'Release Teste 2',
+      startDate: new Date('2021-01-02'),
+      endDate: new Date('2021-12-31')
+    },
+    {
+      taskId: 3,
+      description: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      startDate: new Date('2021-01-03'),
+      endDate: new Date('2021-12-31')
+    }
+  ]
+
+  dataSource = new MatTableDataSource<ReleaseDTO>(this.releases);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  ngAfterViewInit() {
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
+  }
 
   constructor(private themeService: ThemeService) { }
 
@@ -111,6 +151,55 @@ export class DashboardComponent implements OnInit, OnDestroy {
       enterAnimationDuration,
       exitAnimationDuration
     });
+  }
+
+  // Função para editar uma release
+  openEditDialog(release: ReleaseDTO, enterAnimationDuration: string, exitAnimationDuration: string): void {
+    console.log(release);
+    this.dialog.open(ReleasesFormComponent, {
+      width: '350px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: {
+        release
+      }
+    });
+  }
+
+  // Função para abrir o dialog de confirmação
+  openDeleteDialog(releaseId: number, enterAnimationDuration: string, exitAnimationDuration: string): void {
+    // console.log('entrou na função', releaseId);
+    // Busca o release na lista pelo ID
+    const release = this.releases.find(r => r.id === releaseId);
+
+    if (!release) {
+      // Se a release não existir na lista, exibe uma mensagem de erro
+      this.snackbar.openSnackBar('Release não encontrada!', 'warning');
+    }
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Excluir Release',
+        message: `Tem certeza que deseja excluir ${release.description}?`, // Nome dinâmico
+        enterAnimationDuration,
+        exitAnimationDuration
+      }
+    });
+
+    // Se o dialog for confirmar, chamamos a função de exclusão
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteRelease(releaseId);
+      }
+    });
+  }
+
+  // Função para excluir uma release
+  deleteRelease(releaseId: number) {
+    // console.log('Release excluída:', releaseId);
+    this.snackbar.openSnackBar('Release excluída com sucesso!', 'success');
+    // Chamar o service para excluir a release no backend
   }
 
   // Se inscrever no Observable do ThemeService, será notificado sempre que o tema mudar

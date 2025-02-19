@@ -126,5 +126,62 @@
         <span>Total de horas trabalhadas: +30:00</span>
       </mat-card>
     </div>
+
+    <div class="table-releases">
+      <h1>Meus Lançamentos</h1>
+      <mat-card>
+        <div class="actions-user">
+          <button class="button-add" mat-raised-button (click)="registerRelease('200ms', '200ms')">New Release</button>
+        </div>
+        <table class="tbl-container" mat-table [dataSource]="dataSource" matSort>
+          <!-- Responsible Column -->
+          <ng-container matColumnDef="taskId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Atividade </th>
+            <td mat-cell *matCellDef="let releases"> {{ releases.taskId }} </td>
+            <!-- Trazer o nome da atividade posteriormente, com o ID de dados -->
+          </ng-container>
+
+          <!-- Description Responsible Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </th>
+            <td mat-cell *matCellDef="let releases"> {{ releases.description }} </td>
+          </ng-container>
+
+          <!-- Start Date Column -->
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Início </th>
+            <td mat-cell *matCellDef="let releases"> {{ releases.startDate | date: 'HH:mm' }} </td>
+          </ng-container>
+
+          <!-- End Date Column -->
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Término </th>
+            <td mat-cell *matCellDef="let releases"> {{ releases.endDate | date: 'HH:mm' }} </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Ações </th>
+            <td mat-cell *matCellDef="let releases">
+              <button class="button-edit" mat-mini-fab  (click)="openEditDialog(releases, '200ms', '200ms')">
+                <mat-icon fontIcon="edit"></mat-icon>
+              </button>
+              <button mat-mini-fab color="warn" (click)="openDeleteDialog(releases.id, '200ms', '200ms')">
+                <mat-icon fontIcon="delete"></mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+        </table>
+
+        <mat-paginator  [length]="dataSource.data.length"
+                        [pageSize]="10"
+                        [pageSizeOptions]="[5, 10]"
+                        showFirstLastButtons>
+        </mat-paginator>
+      </mat-card>
+    </div>
   </div>
 </div>
