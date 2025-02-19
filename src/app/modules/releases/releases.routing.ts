@@ -1,4 +1,4 @@
-import { ReleasesComponent } from "./page/page/releases.component";
+import { ReleasesComponent } from "./page/releases.component";
 import { Routes } from "@angular/router";
 
 export const releasesRoutes: Routes = [

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReleasesComponent } from './page/page/releases.component';
-import { ReleasesTableComponent } from './page/components/releases-table/releases-table.component';
-import { ReleasesFormComponent } from './page/components/releases-form/releases-form.component';
+import { ReleasesComponent } from './page/releases.component';
+import { ReleasesTableComponent } from './components/releases-table/releases-table.component';
+import { ReleasesFormComponent } from './components/releases-form/releases-form.component';
 import { RouterModule } from '@angular/router';
 import { releasesRoutes } from './releases.routing';
 import { SharedModule } from '../../shared/shared.module';
