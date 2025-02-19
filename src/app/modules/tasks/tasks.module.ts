@@ -6,6 +6,15 @@ import { TasksFormComponent } from './components/tasks-form/tasks-form.component
 import { RouterModule } from '@angular/router';
 import { tasksRoutes } from './tasks.routing';
 import { SharedModule } from '../../shared/shared.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSortModule } from '@angular/material/sort';
+import { MatInputModule } from '@angular/material/input';
 
 
 
@@ -18,6 +27,15 @@ import { SharedModule } from '../../shared/shared.module';
   imports: [
     CommonModule,
     RouterModule.forChild(tasksRoutes),
+    MatCardModule,
+    MatFormFieldModule,
+    MatTableModule,
+    MatInputModule,
+    MatSortModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatIconModule,
+    MatPaginatorModule,
     // SharedModule
     SharedModule
   ]

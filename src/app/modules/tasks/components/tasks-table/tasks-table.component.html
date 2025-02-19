@@ -1,1 +1,82 @@
-<p>tasks-table works!</p>
+<mat-card class="mat-elevation-z8">
+  <div class="actions-user">
+    <button class="button-add" mat-raised-button (click)="openFormDialog('200ms', '200ms')">New Task</button>
+    <mat-form-field>
+      <mat-label>Procure</mat-label>
+      <input matInput placeholder="Nome, Projeto ou Status" (input)="search($event)">
+    </mat-form-field>
+  </div>
+  <table class="tbl-container" mat-table [dataSource]="dataSource" matSort>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome </th>
+      <td mat-cell *matCellDef="let tasks"> {{tasks.name}} </td>
+    </ng-container>
+
+    <!-- User Responsible Column -->
+    <ng-container matColumnDef="projectId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Projeto </th>
+      <td mat-cell *matCellDef="let tasks"> {{ tasks.projectId }} </td>
+      <!-- Trazer o nome do projeto posteriormente, com o ID de dados -->
+    </ng-container>
+
+    <!-- User Responsible Column -->
+    <ng-container matColumnDef="userResponsibleId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Responsável </th>
+      <td mat-cell *matCellDef="let tasks"> {{ tasks.userResponsibleId }} </td>
+      <!-- Trazer o nome do usuário posteriormente, com o ID de dados -->
+    </ng-container>
+
+    <!-- Start Date Column -->
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Data de Início </th>
+      <td mat-cell *matCellDef="let tasks"> {{ tasks.startDate | date: 'dd/MM/yyyy' }} </td>
+    </ng-container>
+
+    <!-- End Date Column -->
+    <ng-container matColumnDef="endDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Data de Término </th>
+      <td mat-cell *matCellDef="let tasks"> {{ tasks.endDate | date: 'dd/MM/yyyy' }} </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+      <td mat-cell *matCellDef="let tasks">
+        <mat-chip-set>
+          @if (tasks.status === 'OPEN') {
+            <mat-chip class="open-chip"> {{ tasks.status }} </mat-chip>
+          } @else if (tasks.status === 'PROGRESS') {
+            <mat-chip class="progress-chip"> {{ tasks.status }} </mat-chip>
+          } @else if (tasks.status === 'PAUSED') {
+            <mat-chip class="paused-chip"> {{ tasks.status }} </mat-chip>
+          } @else {
+            <mat-chip class="done-chip"> {{ tasks.status }} </mat-chip>
+          }
+        </mat-chip-set>
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Ações </th>
+      <td mat-cell *matCellDef="let tasks">
+        <button class="button-edit" mat-mini-fab  (click)="openEditDialog(tasks, '200ms', '200ms')">
+          <mat-icon fontIcon="edit"></mat-icon>
+        </button>
+        <button mat-mini-fab color="warn" (click)="openDeleteDialog(tasks.id, '200ms', '200ms')">
+          <mat-icon fontIcon="delete"></mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+  </table>
+
+  <mat-paginator  [length]="dataSource.data.length"
+                  [pageSize]="10"
+                  [pageSizeOptions]="[5, 10]"
+                  showFirstLastButtons>
+  </mat-paginator>
+</mat-card>

@@ -1,0 +1,64 @@
+mat-card {
+  background-color: var(--bg-secondary);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.actions-user {
+  display: flex;
+  justify-content: space-between;
+}
+
+button.button-add {
+  border-radius: 10px;
+  background-color: var(--secondary-color);
+}
+
+.tbl-container {
+  background-color: var(--bg-primary);
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+}
+
+th {
+  color: var(--secondary-color);
+}
+
+td {
+  color: var(--text-primary);
+}
+
+::ng-deep .light-theme th {
+  color: var(--text-primary) !important;
+}
+
+::ng-deep .light-theme td {
+  color: var(--text-secondary) !important;
+}
+
+.button-edit {
+  background-color: var(--primary-color);
+  margin-right: 10px;
+}
+
+mat-paginator {
+  border-radius: 0 0 10px 10px;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+mat-chip.open-chip {
+  background-color: #664caf;
+}
+
+mat-chip.progress-chip {
+  background-color: #ffb700;
+}
+
+mat-chip.paused-chip {
+  background-color: #f44336;
+}
+
+mat-chip.done-chip {
+  background-color: #8bc34a;
+}
