@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../services/theme-service/theme-service.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -9,6 +10,7 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './toolbar.component.css'
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
+  private CookieService: CookieService = inject(CookieService);
   private destroy$ = new Subject<void>();
   isLightTheme: boolean = false; // Armazenar o estado do tema
 
@@ -30,7 +32,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   // Função para sair do sistema, posteriormente implementar o delete do token/cookie, para garantir a saida do sistema
   logout(): void {
-    console.log('Logout');
+    this.CookieService.delete('token');
     this.router.navigate(['/']);
   }
 
