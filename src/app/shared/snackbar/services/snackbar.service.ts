@@ -13,7 +13,7 @@ export class SnackbarService {
 
     this.snackBar.openFromComponent(SnackbarComponent, {
       data: { message },
-      duration: 5000,
+      duration: 3000,
       horizontalPosition: 'right',
       verticalPosition: 'top',
       panelClass: [panelClass], // Define a classe CSS dinamicamente
