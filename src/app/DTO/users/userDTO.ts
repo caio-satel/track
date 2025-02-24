@@ -6,7 +6,7 @@ export interface UserDTO {
   id?: number;
   name: string;
   email: string;
-  perfil: Perfil;
+  perfil?: Perfil;
   projects?: Project[];
   tasks?: Task[];
 }
