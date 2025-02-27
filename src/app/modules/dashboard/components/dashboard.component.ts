@@ -13,6 +13,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '../../../shared/snackbar/services/snackbar.service';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { Release } from '../../../models/releases/release';
+import { UsersService } from '../../../services/users/users.service';
+import { UserDTO } from '../../../DTO/users/userDTO';
+import { UserLoggedNameDTO } from '../../../DTO/users/userLoggedNameDTO';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,37 +24,25 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   dialog: MatDialog = inject(MatDialog);
   snackbar: SnackbarService = inject(SnackbarService);
+  themeService: ThemeService = inject(ThemeService);
+  userService: UsersService = inject(UsersService);
+  user: UserLoggedNameDTO = { name: '', role: '' };
+
   projects: Project[] = []; // Lista de projetos
   projectColumns: string[] = ['name', 'startDate', 'endDate', 'status', 'priority', 'userResponsible'];
   taskColumns: string[] = ['taskName', 'taskStartDate', 'taskEndDate', 'taskStatus'];
   columns: string[] = ['taskId', 'description', 'startDate', 'endDate', 'actions'];
+
   isLightTheme: boolean = false;  // Para armazenar o estado do tema
-  private destroy$ = new Subject<void>();
+
   currentDate: string = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
   });
-  releases: ReleaseDTO[] = [  // Mock de dados
-    {
-      taskId: 1,
-      description: 'Release Teste',
-      startDate: new Date('2021-01-01'),
-      endDate: new Date('2021-12-31'),
-    },
-    {
-      taskId: 2,
-      description: 'Release Teste 2',
-      startDate: new Date('2021-01-02'),
-      endDate: new Date('2021-12-31')
-    },
-    {
-      taskId: 3,
-      description: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-      startDate: new Date('2021-01-03'),
-      endDate: new Date('2021-12-31')
-    }
-  ]
+
+  releases: Release[] = [];
 
   dataSource = new MatTableDataSource<ReleaseDTO>(this.releases);
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -65,12 +57,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  constructor(private themeService: ThemeService) { }
-
   ngOnInit() {
     this.subscribeTheme(); // Inscrever no Observable do ThemeService
     this.updateTime(); // Data/Mês na inicialização do componente Dashboard
     this.loadProjects(); // Mockup de dados
+    this.getUserName();
     // Chamar o service de projetos para atualizar a lista de projetos e suas tasks
   }
 
@@ -85,45 +76,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   loadProjects() {
     // Simulação de dados - substituir pela chamada ao backend do services de projetos e armazenar em this.projects
-    this.projects = [
-      {
-        id: 1,
-        name: "Projeto Angular",
-        startDate: new Date('2024-02-01'),
-        endDate: new Date('2024-04-01'),
-        status: StatusProject.PROGRESS,
-        userResponsibleId: 2,
-        priority: Priority.HIGH,
-        users: [],
-        tasks: [
-          { name: "Criar componentes", projectId: 1, userResponsibleId: 2, startDate: new Date('2024-02-02'), endDate: new Date('2024-02-10'), status: StatusTask.DONE },
-          { name: "Implementar API", startDate: new Date('2024-02-11'), projectId: 1, userResponsibleId: 2, endDate: new Date('2024-03-01'), status: StatusTask.PROGRESS }
-        ]
-      },
-      {
-        id: 2,
-        name: "Sistema de Vendas",
-        startDate: new Date('2024-03-01'),
-        endDate: new Date('2024-05-30'),
-        status: StatusProject.PLANNED,
-        userResponsibleId: 1,
-        priority: Priority.MEDIUM,
-        users: [],
-        tasks: [
-          { name: "Modelagem do Banco", projectId: 1, userResponsibleId: 2, startDate: new Date('2024-03-05'), endDate: new Date('2024-03-15'), status: StatusTask.PAUSED }
-        ]
-      }
-    ];
   }
 
   // Função exemplo - implementar com back
-  getUserName(userId: number): string {
-    // Simulação de busca de usuário (substituir por API real)
-    const users = [
-      { id: 1, name: "Carlos Silva" },
-      { id: 2, name: "Ana Souza" }
-    ];
-    return users.find(user => user.id === userId)?.name || 'Desconhecido';
+  getUserName(): void {
+    this.userService.getUserLogged().subscribe({
+      next: (response) => this.user = response,
+      error: (err) => console.error('Erro ao buscar usuário logado:', err)
+    });
   }
 
   // Carrega as tasks do projeto correspondente
