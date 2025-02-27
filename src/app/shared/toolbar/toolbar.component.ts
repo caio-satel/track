@@ -3,6 +3,9 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../services/theme-service/theme-service.service';
 import { Subject, takeUntil } from 'rxjs';
+import { UsersService } from '../../services/users/users.service';
+import { User } from '../../models/users/user';
+import { UserLoggedNameDTO } from '../../DTO/users/userLoggedNameDTO';
 
 @Component({
   selector: 'app-toolbar',
@@ -10,18 +13,21 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './toolbar.component.css'
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
-  private CookieService: CookieService = inject(CookieService);
   private destroy$ = new Subject<void>();
-  isLightTheme: boolean = false; // Armazenar o estado do tema
 
-  constructor(private router: Router, private themeService: ThemeService) {
-    this.subscribeTheme();
-  }
+  private router: Router = inject(Router);
+  private themeService: ThemeService = inject(ThemeService);
+  private CookieService: CookieService = inject(CookieService);
+  private usersServices: UsersService = inject(UsersService);
+
+  userLogged: UserLoggedNameDTO = { name: '', role: '' };
+  isLightTheme: boolean = false;
+
   ngOnInit(): void {
     this.subscribeTheme();
+    this.getUserLogged();
   }
 
-  // Se inscrever no Observable do ThemeService, será notificado sempre que o tema mudar
   subscribeTheme():void {
     this.themeService.isLightTheme$
           .pipe(takeUntil(this.destroy$))  // A inscrição será descartada quando destroy$ emitir
@@ -30,7 +36,15 @@ export class ToolbarComponent implements OnInit, OnDestroy {
           });
   }
 
-  // Função para sair do sistema, posteriormente implementar o delete do token/cookie, para garantir a saida do sistema
+  getUserLogged() {
+    this.usersServices.getUserLogged().subscribe({
+      next: (response) => {
+        this.userLogged = response;
+      },
+      error: (err) => console.error('Erro ao buscar usuário logado:', err)
+    });
+  }
+
   logout(): void {
     this.CookieService.delete('token');
     this.router.navigate(['/']);

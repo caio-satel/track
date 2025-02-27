@@ -7,12 +7,14 @@
     }
   </a>
 
-  <mat-list class="toolbar-content">
-    <li><a routerLink="/users">Usuários</a></li>
-    <li><a routerLink="/projects">Projetos</a></li>
-    <li><a routerLink="/tasks">Tasks</a></li>
-    <li><a routerLink="/releases">Lançamentos</a></li>
-  </mat-list>
+  @if (userLogged?.role === 'ADMIN') {
+    <mat-list class="toolbar-content">
+      <li><a routerLink="/users">Usuários</a></li>
+      <li><a routerLink="/projects">Projetos</a></li>
+      <li><a routerLink="/tasks">Tasks</a></li>
+      <li><a routerLink="/releases">Lançamentos</a></li>
+    </mat-list>
+  }
 
   <button mat-button class="btn-logout" (click)="logout()">
     <mat-icon fontIcon="logout"></mat-icon>
