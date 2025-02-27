@@ -1,5 +1,5 @@
 <app-toolbar></app-toolbar>
 <div class="container-table">
   <h1>Usuários</h1>
-  <app-users-table></app-users-table>
+  <app-users-table [users]="users" (userDeleted)="onUserDeleted($event)" (userAdded)="onUserAdded($event)"></app-users-table>
 </div>
