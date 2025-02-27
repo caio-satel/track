@@ -34,4 +34,8 @@ export class AuthService {
     return !!token; // Mesma coisa que: token ? true : false;
   }
 
+  getToken(): string | null {
+    const token = this.CookieService.get('token');
+    return token;
+  }
 }
