@@ -1,23 +1,39 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../enviroments/enviroment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserDTO } from '../../DTO/users/userDTO';
 import { AddUserDTO } from '../../DTO/users/addUserDTO';
 import { User } from '../../models/users/user';
-
+import { AuthService } from '../authentication/auth.service';
+import { UserLoggedNameDTO } from '../../DTO/users/userLoggedNameDTO';
+import { UpdateUserDTO } from '../../DTO/users/updateUserDTO';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
-  http: HttpClient = inject(HttpClient);
   private apiUrl = `${environment.api_URL}/users`;
+
+  constructor(private http: HttpClient, private auth: AuthService) { }
 
   // Crud Users
   // GET - Listar todos os usuários
   getUsers(): Observable<UserDTO[]> {
-    return this.http.get<UserDTO[]>(this.apiUrl);
+    const token = this.auth.getToken();
+
+    // Se não houver token, retorna um erro
+    if (!token) {
+      console.error('Não foi possível obter o token');
+    }
+
+    // Define os headers com o token
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<UserDTO[]>(this.apiUrl, { headers });
   }
 
   // GET - Buscar usuário filtrado por ID
@@ -26,21 +42,53 @@ export class UsersService {
     return this.http.get<UserDTO>(url);
   }
 
+  // GET - Buscar usuário logado
+  getUserLogged(): Observable<UserLoggedNameDTO> {
+    const url = `${this.apiUrl}/userLogged`;
+    const token = this.auth.getToken();
+
+    // Se não houver token, retorna um erro
+    if (!token) {
+      console.error('Não foi possível obter o token');
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<UserLoggedNameDTO>(url, { headers });
+  }
+
   // POST - Cadastrar usuário
-  createUser(user: UserDTO): Observable<AddUserDTO> {
-    return this.http.post<AddUserDTO>(this.apiUrl, user);
+  createUser(user: UserDTO): Observable<UserDTO> {
+    const token = this.auth.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.post<UserDTO>(this.apiUrl, user, { headers });
   }
 
   // PUT - Atualizar usuário
-  updateUser(id: number, user: AddUserDTO): Observable<AddUserDTO> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.put<AddUserDTO>(url, user);
+  updateUser(id: number, user: UpdateUserDTO): Observable<UpdateUserDTO> {
+    const token = this.auth.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    const url = `${this.apiUrl}/role/${id}`;
+    return this.http.put<UpdateUserDTO>(url, user, { headers });
   }
 
   // DELETE - Deletar usuário
   deleteUser(id: number): Observable<User> {
+    const token = this.auth.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
     const url = `${this.apiUrl}/${id}`;
-    return this.http.delete<User>(url);
+    return this.http.delete<User>(url, { headers });
   }
-
 }
