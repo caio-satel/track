@@ -32,13 +32,13 @@
     <!-- Start Date Column -->
     <ng-container matColumnDef="startDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Data de Início </th>
-      <td mat-cell *matCellDef="let projects"> {{projects.startDate | date:'dd/MM/yyyy - HH:mm'}} </td>
+      <td mat-cell *matCellDef="let projects"> {{projects.startDate | date:'dd/MM/yyyy'}} </td>
     </ng-container>
 
     <!-- End Date Column -->
     <ng-container matColumnDef="endDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Data de Término </th>
-      <td mat-cell *matCellDef="let projects"> {{projects.endDate | date:'dd/MM/yyyy - HH:mm'}} </td>
+      <td mat-cell *matCellDef="let projects"> {{projects.endDate | date:'dd/MM/yyyy'}} </td>
     </ng-container>
 
     <!-- Status Column -->
@@ -60,9 +60,9 @@
     </ng-container>
 
     <!-- User Responsible Column -->
-    <ng-container matColumnDef="userResponsibleId">
+    <ng-container matColumnDef="responsibleUser">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Responsável </th>
-      <td mat-cell *matCellDef="let projects"> {{ projects.userResponsibleId }} </td> <!-- Trazer o nome do usuário posteriormente, com o ID de dados -->
+      <td mat-cell *matCellDef="let projects"> {{ projects.responsibleUser.name }} </td>
     </ng-container>
 
     <!-- Actions Column -->
