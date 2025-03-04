@@ -1,5 +1,5 @@
-<mat-card class="mat-elevation-z8">
-  <mat-card-title>{{ data ? 'Editar Projeto' : 'Novo Projeto' }}</mat-card-title>
+<mat-card class="mat-elevation-z8" *ngIf="!data">
+  <mat-card-title>Novo projeto</mat-card-title>
   <mat-card-content>
     <form [formGroup]="newProjectForm" (ngSubmit)="addProject()">
       <mat-form-field>
@@ -32,9 +32,9 @@
 
       <mat-form-field>
         <mat-label>Usuario Responsável</mat-label>
-        <mat-select name="userResponsibleId" formControlName="userResponsibleId">
+        <mat-select name="responsibleUser" formControlName="responsibleUser">
           @for (user of users; track users) {
-            <mat-option [value]="user.id">{{user.id}}</mat-option>
+            <mat-option [value]="user.id">{{ user.name }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -49,7 +49,76 @@
       </mat-form-field>
 
       <mat-card-actions>
-        <button mat-button color="warn" (click)="closeDialog()">Cancelar</button>
+        <button mat-button color="warn" (click)="this.dialogRef.close()">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit">Salvar</button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="mat-elevation-z8" *ngIf="data">
+  <mat-card-title>Editar projeto</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="editProjectForm" (ngSubmit)="editProject()">
+      <mat-form-field>
+        <mat-label for="name">Nome</mat-label>
+        <input matInput type="text" name="name" id="name" formControlName="name" required >
+        @if (newProjectForm.get('name')?.hasError('required')) {
+          <mat-error>O campo nome é obrigatório</mat-error>
+        } @else {
+          <mat-error>Nome deve conter pelo menos 3 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Data de Início e Término</mat-label>
+        <mat-date-range-input [formGroup]="newProjectForm" [rangePicker]="picker">
+          <input matStartDate formControlName="startDate" placeholder="Data de Início" required>
+          <input matEndDate formControlName="endDate" placeholder="Data de Término" required>
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        @if (newProjectForm.controls.startDate.hasError('matStartDateInvalid')) {
+          <mat-error>Data de Início inválida</mat-error>
+        }
+        @if (newProjectForm.controls.endDate.hasError('matEndDateInvalid')) {
+          <mat-error>Data de Término inválida</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Usuario Responsável</mat-label>
+        <mat-select name="responsibleUser" formControlName="responsibleUser">
+          @for (user of users; track users) {
+            <mat-option [value]="user.id">{{ user.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label for="priority">Prioridade</mat-label>
+        <mat-select formControlName="priority">
+          <mat-option value="HIGH">Alta</mat-option>
+          <mat-option value="MEDIUM">Média</mat-option>
+          <mat-option value="LOW">Baixa</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label for="status">Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="PLANNED">Em planejamento</mat-option>
+          <mat-option value="PROGRESS">Em andamento</mat-option>
+          <mat-option value="PAUSED">Pausada</mat-option>
+          <mat-option value="CANCELED">Cancelada</mat-option>
+          <mat-option value="DONE">Concluída</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-card-actions>
+        <button mat-button color="warn" (click)="this.dialogRef.close()">Cancelar</button>
         <button mat-raised-button color="primary" type="submit">Salvar</button>
       </mat-card-actions>
     </form>
