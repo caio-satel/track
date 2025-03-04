@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, Inject, OnInit} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SnackbarService } from '../../../../shared/snackbar/services/snackbar.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UsersService } from '../../../../services/users/users.service';
 import { UpdateUserDTO } from '../../../../DTO/users/updateUserDTO';
 
 @Component({
