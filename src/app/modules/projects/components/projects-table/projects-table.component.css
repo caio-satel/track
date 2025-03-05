@@ -54,7 +54,7 @@ mat-chip.white-text {
 /* Chip Colors */
 mat-chip.high-chip,
 mat-chip.cancelled-chip {
-  background-color: #df4d4d;
+  background-color: #c47777;
 }
 
 mat-chip.medium-chip {
@@ -67,9 +67,13 @@ mat-chip.planned-chip {
 }
 
 mat-chip.progress-chip {
-  background-color: #488599;
+  background-color: #c683bc;
 }
 
-mat-chip.other-chip {
+mat-chip.done-chip {
   background-color: #00ff95;
+}
+
+mat-chip.paused-chip {
+  background-color: #a4e6eb;
 }
