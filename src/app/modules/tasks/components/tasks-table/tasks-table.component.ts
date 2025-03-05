@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TaskDTO } from '../../../../DTO/tasks/taskDTO';
 import { StatusTask } from '../../../../models/enum/statusTask.enum';
@@ -8,6 +8,9 @@ import { TasksFormComponent } from '../tasks-form/tasks-form.component';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
 import { SnackbarService } from '../../../../shared/snackbar/services/snackbar.service';
 import { MatDialog } from '@angular/material/dialog';
+import { CreateTaskDTO } from '../../../../DTO/tasks/CreateTaskDTO';
+import { UpdateTaskDTO } from '../../../../DTO/tasks/UpdateTaskDTO';
+import { CollaboratorsModalComponent } from '../collaborators-modal/collaborators-modal.component';
 
 @Component({
   selector: 'app-tasks-table',
@@ -15,54 +18,27 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrl: './tasks-table.component.css'
 })
 export class TasksTableComponent {
-  snackbar: SnackbarService = inject(SnackbarService);
-  dialog: MatDialog = inject(MatDialog);
-  columns = ['name', 'projectId', 'userResponsibleId', 'startDate', 'endDate', 'status', 'actions'];
+  @Input() tasks: TaskDTO[] = [];
+  @Output() taskAdded = new EventEmitter<CreateTaskDTO>();
+  @Output() taskEdited = new EventEmitter<UpdateTaskDTO>();
+  @Output() taskDeleted = new EventEmitter<number>();
 
-  // Mock de dados
-  tasks: TaskDTO[] = [
-    {
-      id: 1,
-      projectId: 1,
-      userResponsibleId: 2,
-      name: 'Task 1',
-      startDate: new Date(),
-      endDate: new Date(),
-      status: StatusTask.PAUSED
-    },
-    {
-      id: 2,
-      projectId: 1,
-      userResponsibleId: 1,
-      name: 'Task 2',
-      startDate: new Date(),
-      endDate: new Date(),
-      status: StatusTask.PROGRESS
-    },
-    {
-      id: 3,
-      projectId: 1,
-      userResponsibleId: 1,
-      name: 'Task 3',
-      startDate: new Date(),
-      endDate: new Date(),
-      status: StatusTask.OPEN
-    },
-    {
-      id: 4,
-      projectId: 2,
-      userResponsibleId: 3,
-      name: 'Task 4',
-      startDate: new Date(),
-      endDate: new Date(),
-      status: StatusTask.DONE
-    },
-  ];
+  columns = ['name', 'projectId', 'startDate', 'endDate', 'status', 'actions'];
 
-  // MatPaginator e MatSort
   dataSource = new MatTableDataSource<TaskDTO>(this.tasks);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(
+    private snackbar: SnackbarService,
+    private dialog: MatDialog
+  ) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['tasks']) {
+      this.dataSource.data = this.tasks;
+    }
+  }
 
   ngAfterViewInit() {
     if (this.paginator) {
@@ -73,17 +49,12 @@ export class TasksTableComponent {
     }
   }
 
-  // Função para filtrar os dados
   search(event: Event) {
-    // Recebe o evento de INPUT - Toda vez que algo é digitado no input, ele é capturado
     const target = event.target as HTMLInputElement;
-    // Transforma o value do input em string (todos os caracteres ficam minúsculos e sem espaços)
     const value = target.value.trim().toLowerCase();
-    // Aplica o filtro ao dataSource
     this.dataSource.filter = value;
   }
 
-  // Função para aplicar filtro customizado
   setCustomFilter() {
     this.dataSource.filterPredicate = (data: TaskDTO, filter: string) => {
       return (
@@ -93,20 +64,22 @@ export class TasksTableComponent {
     };
   }
 
-  // Função para abrir o dialog de criação de nova task
   openFormDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    // console.log('entrou na função form');
-    this.dialog.open(TasksFormComponent, {
+    const dialogRef = this.dialog.open(TasksFormComponent, {
       width: '350px',
       enterAnimationDuration,
       exitAnimationDuration,
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.taskAdded.emit(result as CreateTaskDTO);
+      }
+    });
   }
 
-  // Função para editar uma atividade
-  openEditDialog(task: TaskDTO, enterAnimationDuration: string, exitAnimationDuration: string): void {
-    console.log(task);
-    this.dialog.open(TasksFormComponent, {
+  openEditDialog(task: UpdateTaskDTO, enterAnimationDuration: string, exitAnimationDuration: string): void {
+    const dialogRef = this.dialog.open(TasksFormComponent, {
       width: '350px',
       enterAnimationDuration,
       exitAnimationDuration,
@@ -114,16 +87,18 @@ export class TasksTableComponent {
         task
       }
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.taskEdited.emit(result as UpdateTaskDTO);
+      }
+    });
   }
 
-  // Função para abrir o dialog de confirmação
   openDeleteDialog(taskId: number, enterAnimationDuration: string, exitAnimationDuration: string): void {
-    // console.log('entrou na função', taskId);
-    // Busca o atividade na lista pelo ID
     const task = this.tasks.find(t => t.id === taskId);
 
     if (!task) {
-      // Se a atividade não existir na lista, exibe uma mensagem de erro
       this.snackbar.openSnackBar('Atividade não encontrada!', 'warning');
     }
 
@@ -131,25 +106,25 @@ export class TasksTableComponent {
       width: '350px',
       data: {
         title: 'Excluir Atividade',
-        message: `Tem certeza que deseja excluir ${task.name}?`, // Nome dinâmico
+        message: `Tem certeza que deseja excluir a tarefa ${task.name}?`,
         enterAnimationDuration,
         exitAnimationDuration
       }
     });
 
-    // Se o dialog for confirmar, chamamos a função de exclusão
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.deleteTask(taskId);
+        this.taskDeleted.emit(taskId);
       }
     });
   }
 
-  // Função para excluir um atividade
-  deleteTask(taskId: number) {
-    // console.log('Atividade excluída:', taskId);
-    this.snackbar.openSnackBar('Atividade excluída com sucesso!', 'success');
-    // Chamar o service para excluir a atividade no backend
+  openCollaboratorsDialog(collaborators: any[], enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(CollaboratorsModalComponent, {
+      width: '350px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: { collaborators }
+    });
   }
-
 }
