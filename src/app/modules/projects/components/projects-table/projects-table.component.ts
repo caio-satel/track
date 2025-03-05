@@ -101,8 +101,7 @@ export class ProjectsTableComponent implements OnInit {
     const project = this.projects.find(p => p.id === projectId);
 
     if (!project) {
-      this.snackbar.openSnackBar('Projeto não encontrado!', 'warning');
-      return;
+      return this.snackbar.openSnackBar('Projeto não encontrado!', 'warning');
     }
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
