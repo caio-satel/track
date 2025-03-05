@@ -17,16 +17,16 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule, MatDateRangeInput } from '@angular/material/datepicker';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
-
-
+import { CollaboratorsModalComponent } from './components/collaborators-modal/collaborators-modal.component';
 
 @NgModule({
   declarations: [
     TasksComponent,
     TasksTableComponent,
-    TasksFormComponent
+    TasksFormComponent,
+    CollaboratorsModalComponent
   ],
   imports: [
     CommonModule,
