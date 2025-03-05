@@ -1,10 +1,8 @@
-import { UsersService } from './../../../../services/users/users.service';
-import { AfterViewInit, Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { UserDTO } from '../../../../DTO/users/userDTO';
-import { Perfil } from '../../../../models/enum/perfil.enum';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 import { UsersFormComponent } from '../users-form/users-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
@@ -19,9 +17,9 @@ import { UpdateUserDTO } from '../../../../DTO/users/updateUserDTO';
 })
 export class UsersTableComponent implements OnInit, AfterViewInit {
   @Input() users: UserDTO[] = [];
-  @Output() userDeleted = new EventEmitter<number>();
   @Output() userAdded = new EventEmitter<UserDTO>();
   @Output() userEdited = new EventEmitter<UpdateUserDTO>();
+  @Output() userDeleted = new EventEmitter<number>();
 
   constructor(
     private dialog: MatDialog,
@@ -54,26 +52,21 @@ export class UsersTableComponent implements OnInit, AfterViewInit {
   }
 
   search(event: Event) {
-    // Recebe o evento de INPUT - Toda vez que algo é digitado no input, ele é capturado
     const target = event.target as HTMLInputElement;
-    // Transforma o value do input em string (todos os caracteres ficam minúsculos e sem espaços)
     const value = target.value.trim().toLowerCase();
-    // Aplica o filtro ao dataSource
     this.dataSource.filter = value;
   }
 
   setCustomFilter() {
     this.dataSource.filterPredicate = (data: UserDTO, filter: string) => {
-      const lowerFilter = filter.trim().toLowerCase();
       return (
-        data.name.includes(lowerFilter) ||
-        data.email.includes(lowerFilter) ||
-        data.role.includes(lowerFilter)
+        data.name.includes(filter) ||
+        data.email.includes(filter) ||
+        data.role.includes(filter)
       );
     };
   }
 
-  // Função para abrir o dialog de criação de novo usuário
   openFormDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     const dialogRef = this.dialog.open(UsersFormComponent, {
       width: '350px',
@@ -83,13 +76,11 @@ export class UsersTableComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.snackbar.openSnackBar('Usuário cadastrado com sucesso!', 'success');
         this.userAdded.emit(result);
       }
     });
   }
 
-  // Função para editar um usuário
   openEditDialog(user: UpdateUserDTO, enterAnimationDuration: string, exitAnimationDuration: string): void {
     const dialogRef = this.dialog.open(UsersFormComponent, {
       width: '350px',
@@ -100,17 +91,15 @@ export class UsersTableComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.snackbar.openSnackBar('Usuário atualizado com sucesso!', 'success');
-        this.userEdited.emit(result); // Apenas emite o resultado, pois já inclui o ID
+        this.userEdited.emit(result as UpdateUserDTO);
       }
     });
   }
 
-  // Função para abrir o dialog de confirmação
   openDeleteDialog(userId: number, enterAnimationDuration: string, exitAnimationDuration: string): void {
     const user = this.users.find(u => u.id === userId);
 
-    if (!user) {
+    if(!user) {
       this.snackbar.openSnackBar('Usuário não encontrado!', 'warning');
     }
 
@@ -126,8 +115,6 @@ export class UsersTableComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.snackbar.openSnackBar('Usuário excluído com sucesso!', 'success');
-        this.users = this.users.filter(user => user.id !== userId);
         this.userDeleted.emit(userId);
       }
     });
