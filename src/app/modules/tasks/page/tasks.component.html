@@ -1,5 +1,9 @@
 <app-toolbar></app-toolbar>
 <div class="container-table">
   <h1>Atividades</h1>
-  <app-tasks-table></app-tasks-table>
+  <app-tasks-table [tasks]="tasks"
+                  (taskAdded)="onTaskAdded($event)"
+                  (taskEdited)="onTaskEdited($event)"
+                  (taskDeleted)="onTaskDeleted($event)">
+  </app-tasks-table>
 </div>
