@@ -52,7 +52,7 @@ mat-paginator {
 }
 
 mat-chip.open-chip {
-  background-color: #664caf;
+  background-color: #c1b2ec;
 }
 
 mat-chip.progress-chip {
@@ -60,7 +60,7 @@ mat-chip.progress-chip {
 }
 
 mat-chip.paused-chip {
-  background-color: #f44336;
+  background-color: #e28d87;
 }
 
 mat-chip.done-chip {
