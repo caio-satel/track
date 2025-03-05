@@ -1,9 +1,10 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { SnackbarService } from '../../../../shared/snackbar/services/snackbar.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TasksService } from '../../../../services/tasks/tasks.service';
 import { TaskDTO } from '../../../../DTO/tasks/taskDTO';
-import { UserDTO } from '../../../../DTO/users/userDTO';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-releases-form',
@@ -11,77 +12,85 @@ import { UserDTO } from '../../../../DTO/users/userDTO';
   styleUrl: './releases-form.component.css'
 })
 export class ReleasesFormComponent {
-  snackbar: SnackbarService = inject(SnackbarService);
-  readonly dialogRef = inject(MatDialogRef<ReleasesFormComponent>);
-  isClosing = false;
-  tasks: TaskDTO[] = [];
-  users: UserDTO[] = [];
-
   newReleaseForm = new FormGroup({
     description: new FormControl('', [Validators.required, Validators.minLength(10)]),
+    dateRelease: new FormControl(null, [Validators.required]),
+    startTime: new FormControl('', [Validators.required]),
+    endTime: new FormControl('', [Validators.required]),
     taskId: new FormControl('', [Validators.required]),
-    userId: new FormControl('', [Validators.required]),
-    startDate: new FormControl('', [Validators.required]),
-    endDate: new FormControl('', [Validators.required])
   });
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+  tasks: TaskDTO[] = [];
+  hoursReleased: string = '0h';
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private snackbar: SnackbarService,
+    private taskService: TasksService,
+    readonly dialogRef: MatDialogRef<ReleasesFormComponent>
+  ) {}
 
   ngOnInit(): void {
-    // Implementar a lógica
-    // Buscar todos os usuários no banco de dados e armazená-los no array users
+    this.listTasksByUser();
+    this.newReleaseForm.get('startTime').valueChanges.subscribe(() => this.calculateHours());
+    this.newReleaseForm.get('endTime').valueChanges.subscribe(() => this.calculateHours());
+  }
 
-    // Se o release está editando um release, preencher o formulário com os dados do release recebidos no parâmetro data
-    if (this.data && this.data.release) {
-      this.newReleaseForm.patchValue({
-        description: this.data.release.description,
-        taskId: this.data.release.taskId,
-        userId: this.data.release.userId,
-        startDate: this.formatTime(this.data.release.startDate),
-        endDate: this.formatTime(this.data.release.endDate)
-      });
+  // Método para converter "HH:mm" em minutos
+  timeToMinutes(time: string): number {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+
+  // Método para calcular a diferença de horas
+  calculateHours(): void {
+    const startTime = this.newReleaseForm.get('startTime').value;
+    const endTime = this.newReleaseForm.get('endTime').value;
+
+    if (startTime && endTime) {
+      // Converte as strings "HH:mm" para minutos
+      const startMinutes = this.timeToMinutes(startTime);
+      const endMinutes = this.timeToMinutes(endTime);
+
+      // Calcula a diferença em minutos
+      const diffMinutes = endMinutes - startMinutes;
+
+      // Converte a diferença para horas
+      const hours = Math.floor(diffMinutes / 60);
+      const minutes = diffMinutes % 60;
+
+      // Formata o resultado
+      this.hoursReleased = `${hours}h${minutes > 0 ? ` ${minutes}m` : ''}`;
+    } else {
+      this.hoursReleased = '0h';
     }
   }
 
-  private formatTime(dateString: string): string {
-    if (!dateString) return '';
-    // Converte a data para horário local antes de formatar
-    const date = new Date(dateString);
-
-    // Formata para "HH:mm" com base no horário local
-    return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  listTasksByUser(): void {
+    this.taskService.getTasksByUser().subscribe({
+      next: (tasks) => {
+        this.tasks = tasks;
+      },
+      error: () => this.snackbar.openSnackBar('Erro ao buscar tarefas!', 'error')
+    });
   }
 
   addRelease(): void {
-    // Posteriormente implementar a lógica chamando o serviço de releases
-    // Verificar se o dialog está fechando ou não, para evitar a mensagem do snackbar
-    if (this.isClosing) {
-      return;
+    if (!this.newReleaseForm.valid) {
+      return this.snackbar.openSnackBar('Preencha todos os campos corretamente!', 'warning')
     }
 
     const releaseData = this.newReleaseForm.value;
-    // Se o formulário estiver inválido, exibe uma mensagem de erro
-    // Se o release (data) não existir e o formulário estiver válido, criar um novo release
-    // Se o release (data) existir e o formulário estiver válido, atualizar o release
-    if (!this.newReleaseForm.valid || !this.newReleaseForm.value) {
-      return this.snackbar.openSnackBar('Preencha todos os campos corretamente!', 'warning')
+    const formatDate = (date: Date) => format(date, 'dd/MM/yyyy');
 
-    } else if (!this.data && this.newReleaseForm.valid && this.newReleaseForm.value) {
-      console.log(releaseData); // Aqui chamaria um serviço de criação
-      this.snackbar.openSnackBar('Release criada com sucesso!', 'success');
-      this.newReleaseForm.reset();
-      this.dialogRef.close();
+    const payload = {
+      description: releaseData.description,
+      dateRelease: formatDate(releaseData.dateRelease),
+      startTime: releaseData.startTime,
+      endTime: releaseData.endTime,
+      taskId: releaseData.taskId,
+    };
 
-    } else {
-      console.log('Editando release:', { ...this.data.release, ...releaseData }); // Aqui chamaria um serviço de atualização
-      this.snackbar.openSnackBar('Release atualizada com sucesso!', 'success');
-      this.newReleaseForm.reset();
-      this.dialogRef.close();
-    }
-  }
-
-  closeDialog(): void {
-    this.isClosing = true; // Marca que o modal está sendo fechado
-    this.dialogRef.close();
+    this.dialogRef.close(payload);
   }
 }
