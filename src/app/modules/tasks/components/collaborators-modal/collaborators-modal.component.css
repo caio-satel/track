@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  padding: 10px;
+}
+
+.header-integrantes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+ul {
+  list-style: none;
+}
