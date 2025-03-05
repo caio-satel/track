@@ -6,6 +6,7 @@
       <input matInput placeholder="Nome, E-mail ou Perfil" (input)="search($event)">
     </mat-form-field>
   </div>
+  
   <table class="tbl-container" mat-table [dataSource]="dataSource" matSort>
     <!-- Name Column -->
     <ng-container matColumnDef="name">
