@@ -3,6 +3,6 @@ export interface ReleaseDTO {
   taskId: number;
   userId?: number;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  startTime: string;
+  endTime: string;
 }
