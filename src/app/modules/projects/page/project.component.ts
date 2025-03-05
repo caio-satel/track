@@ -12,7 +12,10 @@ import { SnackbarService } from '../../../shared/snackbar/services/snackbar.serv
 export class ProjectComponent {
   projects: ProjectDTO[] = [];
 
-  constructor(private projectService: ProjectsService, private snackbar: SnackbarService) { }
+  constructor(
+    private projectService: ProjectsService,
+    private snackbar: SnackbarService
+  ) { }
 
   ngOnInit(): void {
     this.loadProjects();
@@ -23,7 +26,7 @@ export class ProjectComponent {
       next: (response) => {
         this.projects = response;
       },
-      error: (err) => console.error('Erro ao buscar projetos:', err)
+      error: () => this.snackbar.openSnackBar('Erro ao buscar projetos!', 'error')
     });
   }
 
@@ -32,8 +35,8 @@ export class ProjectComponent {
       next: (response) => {
         if(response) {
           this.projects = [...this.projects, response];
-          this.snackbar.openSnackBar('Projeto cadastrado com sucesso!', 'success');
         }
+        this.snackbar.openSnackBar('Projeto cadastrado com sucesso!', 'success');
       },
       error: () => this.snackbar.openSnackBar('Erro ao cadastrar projeto!', 'error')
     });
@@ -44,7 +47,7 @@ export class ProjectComponent {
       next: () => {
         this.projects = this.projects.map(project => {
           if (project.id === updatedProject.id) {
-            return { ...project, ...updatedProject };
+            return { ...project, ...updatedProject};
           }
           return project;
         });
@@ -59,9 +62,8 @@ export class ProjectComponent {
       next: (response) => {
         if (response) {
           this.projects = this.projects.filter(project => project.id !== projectId);
-          this.snackbar.openSnackBar('Projeto excluído com sucesso!', 'success');
         }
-        this.loadProjects();
+        this.snackbar.openSnackBar('Projeto excluído com sucesso!', 'success');
       },
       error: () => this.snackbar.openSnackBar('Erro ao excluir projeto!', 'error')
     });
