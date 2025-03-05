@@ -4,8 +4,8 @@ import { StatusProject } from "../../models/enum/statusProject.enum";
 export interface UpdateProjectDTO {
   id?: number;
   name: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   responsibleUser: number;
   priority: Priority;
   status: StatusProject;
