@@ -45,23 +45,18 @@ export class UsersFormComponent implements OnInit {
 
   editUser(): void {
     if (!this.data?.user?.id) {
-      console.error('Usuário não encontrado!');
-      return;
+      return this.snackbar.openSnackBar('Usuário não encontrado no banco de dados!', 'warning');
     }
+
     if (!this.editUserForm.valid || !this.editUserForm.value) {
       return this.snackbar.openSnackBar('Preencha todos os campos corretamente!', 'warning');
     }
 
-    // Criar objeto UpdateUserDTO com ID e role
     const updateData: UpdateUserDTO = {
       id: this.data.user.id,
       role: this.editUserForm.value.role
     };
 
     this.dialogRef.close(updateData);
-  }
-
-  onCancel(): void {
-    this.dialogRef.close();
   }
 }
