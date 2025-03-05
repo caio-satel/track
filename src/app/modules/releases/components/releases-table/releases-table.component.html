@@ -3,22 +3,20 @@
     <button class="button-add" mat-raised-button (click)="openFormDialog('200ms', '200ms')">New Release</button>
     <mat-form-field>
       <mat-label>Procure</mat-label>
-      <input matInput placeholder="Descrição ou Responsável" (input)="search($event)">
+      <input matInput placeholder="Descrição" (input)="search($event)">
     </mat-form-field>
   </div>
   <table class="tbl-container" mat-table [dataSource]="dataSource" matSort>
     <!-- Responsible Column -->
-    <ng-container matColumnDef="taskId">
+    <ng-container matColumnDef="nameTask">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Atividade </th>
-      <td mat-cell *matCellDef="let releases"> {{ releases.taskId }} </td>
-      <!-- Trazer o nome da atividade posteriormente, com o ID de dados -->
+      <td mat-cell *matCellDef="let releases"> {{ releases.task.name }} </td>
     </ng-container>
 
     <!-- User Responsible Column -->
-    <ng-container matColumnDef="userId">
+    <ng-container matColumnDef="nameUser">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Responsável pelo Lançamento </th>
-      <td mat-cell *matCellDef="let releases"> {{ releases.userId }} </td>
-      <!-- Trazer o nome do responsável posteriormente, com o ID de dados -->
+      <td mat-cell *matCellDef="let releases"> {{ releases.user.name }} </td>
     </ng-container>
 
     <!-- User Responsible Column -->
@@ -28,34 +26,21 @@
     </ng-container>
 
     <!-- Start Date Column -->
-    <ng-container matColumnDef="startDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Início </th>
-      <td mat-cell *matCellDef="let releases"> {{ releases.startDate | date: 'HH:mm' }} </td>
+    <ng-container matColumnDef="startTime">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Horário de Início </th>
+      <td mat-cell *matCellDef="let releases"> {{ releases.startTime }} </td>
     </ng-container>
 
     <!-- End Date Column -->
-    <ng-container matColumnDef="endDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Término </th>
-      <td mat-cell *matCellDef="let releases"> {{ releases.endDate | date: 'HH:mm' }} </td>
+    <ng-container matColumnDef="endTime">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Horário de Término </th>
+      <td mat-cell *matCellDef="let releases"> {{ releases.endTime }} </td>
     </ng-container>
 
     <!-- Registration Date Column -->
-    <ng-container matColumnDef="createdAt">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Data de Registro </th>
-      <td mat-cell *matCellDef="let releases"> {{ releases.createdAt | date: 'dd/mm/yyy - HH:mm' }} </td>
-    </ng-container>
-
-    <!-- Actions Column -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Ações </th>
-      <td mat-cell *matCellDef="let releases">
-        <button class="button-edit" mat-mini-fab  (click)="openEditDialog(releases, '200ms', '200ms')">
-          <mat-icon fontIcon="edit"></mat-icon>
-        </button>
-        <button mat-mini-fab color="warn" (click)="openDeleteDialog(releases.id, '200ms', '200ms')">
-          <mat-icon fontIcon="delete"></mat-icon>
-        </button>
-      </td>
+    <ng-container matColumnDef="dateRelease">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Lançamento - Data </th>
+      <td mat-cell *matCellDef="let releases"> {{ releases.dateRelease }} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
