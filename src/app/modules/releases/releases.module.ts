@@ -18,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 
@@ -32,6 +33,8 @@ import { MatSortModule } from '@angular/material/sort';
     RouterModule.forChild(releasesRoutes),
     FormsModule,
     ReactiveFormsModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
     MatNativeDateModule,
     MatTableModule,
     MatCardModule,
