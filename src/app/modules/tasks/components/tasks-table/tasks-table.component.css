@@ -41,6 +41,10 @@ td {
   margin-right: 10px;
 }
 
+.btn-collaborators {
+  margin-right: 10px;
+}
+
 mat-paginator {
   border-radius: 0 0 10px 10px;
   color: var(--text-primary);
