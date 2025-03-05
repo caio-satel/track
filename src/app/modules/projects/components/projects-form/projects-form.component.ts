@@ -36,31 +36,22 @@ export class ProjectsFormComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private snackBar: SnackbarService,
+    private snackbar: SnackbarService,
     private userService: UsersService,
     readonly dialogRef: MatDialogRef<ProjectsFormComponent>
   ) { }
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe({
-      next: (users) => {
-        this.users = users;
-      },
-      error: (error) => {
-        console.error('Erro ao carregar usuários:', error);
-      }
-    });
+    this.listUsers();
 
     if (this.data?.project) {
-      const startDate = new Date(this.data.project.startDate);
-      const endDate = new Date(this.data.project.endDate);
-
-      const formatDate = (date: Date) => format(date, 'dd/MM/yyyy');
+      const startDate = this.convertToDate(this.data.project.startDate);
+      const endDate = this.convertToDate(this.data.project.endDate);
 
       this.editProjectForm.patchValue({
         name: this.data.project.name,
-        startDate: formatDate(startDate),
-        endDate: formatDate(endDate),
+        startDate: startDate,
+        endDate: endDate,
         responsibleUser: this.data.project.responsibleUser.id,
         priority: this.data.project.priority,
         status: this.data.project.status
@@ -68,10 +59,34 @@ export class ProjectsFormComponent {
     }
   }
 
+  listUsers(): void {
+    this.userService.getUsers().subscribe({
+      next: (users) => {
+        this.users = users;
+      },
+      error: () => this.snackbar.openSnackBar('Erro ao buscar usuários!', 'error')
+    });
+  }
+
+  // Função para converter dd/MM/yyyy para Date
+  convertToDate(dateString: string): Date {
+    const [day, month, year] = dateString.split('/');
+    return new Date(+year, +month - 1, +day);
+  }
+
+  // Função para converter Date para dd/MM/yyyy
+  formatDateToDDMMYYYY(date: Date): string {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
   addProject(): void {
     if (!this.newProjectForm.valid) {
-      return this.snackBar.openSnackBar('Preencha todos os campos corretamente!', 'warning');
+      return this.snackbar.openSnackBar('Preencha todos os campos corretamente!', 'warning');
     }
+
     const formValue = this.newProjectForm.value;
     const formatDate = (date: Date) => format(date, 'dd/MM/yyyy');
 
@@ -88,24 +103,27 @@ export class ProjectsFormComponent {
 
   editProject(): void {
     if (!this.data?.project?.id) {
-      console.error('Projeto não encontrado!');
-      return;
+      return this.snackbar.openSnackBar('Projeto não encontrado!', 'warning');
     }
     if (!this.editProjectForm.valid || !this.editProjectForm.value) {
-      return this.snackBar.openSnackBar('Preencha todos os campos corretamente!', 'warning');
+      return this.snackbar.openSnackBar('Preencha todos os campos corretamente!', 'warning');
     }
 
     const formValue = this.editProjectForm.value;
 
+    const startDateFormatted = this.formatDateToDDMMYYYY(formValue.startDate);
+    const endDateFormatted = this.formatDateToDDMMYYYY(formValue.endDate);
+
     const updateData: ProjectDTO = {
       id: this.data.project.id,
       name: this.editProjectForm.value.name,
-      startDate: formValue.startDate,
-      endDate: formValue.endDate,
+      startDate: startDateFormatted,
+      endDate: endDateFormatted,
       responsibleUser: +this.editProjectForm.value.responsibleUser,
       priority: this.editProjectForm.value.priority as Priority,
       status: this.editProjectForm.value.status as StatusProject
     };
+    
     this.dialogRef.close(updateData);
   }
 }
