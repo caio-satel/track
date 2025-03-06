@@ -6,5 +6,5 @@ export interface TaskDTO {
   startDate: Date;
   endDate: Date;
   status?: StatusTask;
-  projectId: number;
+  projectId?: number;
 }
