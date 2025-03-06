@@ -42,6 +42,23 @@ private apiUrl = `${environment.api_URL}/releases`;
     return this.http.get<ReleaseDTO>(url);
   }
 
+  // GET - Buscar release filtrada por user logged
+  getReleasesByUserLogged(): Observable<ReleaseDTO[]> {
+    const token = this.auth.getToken();
+
+    if (!token) {
+      console.error('Não foi possível obter o token');
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/byUser`;
+    return this.http.get<ReleaseDTO[]>(url, { headers });
+  }
+
   // POST - Cadastrar release
   createRelease(release: CreateReleaseDTO): Observable<CreateReleaseDTO> {
     const token = this.auth.getToken();
