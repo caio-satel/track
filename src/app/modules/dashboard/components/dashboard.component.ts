@@ -1,10 +1,6 @@
-import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Project } from '../../../models/projects/project';
-import { StatusProject } from '../../../models/enum/statusProject.enum';
-import { Priority } from '../../../models/enum/priority.enum';
-import { StatusTask } from '../../../models/enum/statusTask.enum';
+import { DashboardService } from './../../../services/dashboard/dashboard.service';
+import { Component,OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ThemeService } from '../../../services/theme-service/theme-service.service';
-import { Subject, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ReleasesFormComponent } from '../../releases/components/releases-form/releases-form.component';
 import { ReleaseDTO } from '../../../DTO/releases/releaseDTO';
@@ -13,36 +9,39 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '../../../shared/snackbar/services/snackbar.service';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
-import { Release } from '../../../models/releases/release';
 import { UsersService } from '../../../services/users/users.service';
-import { UserDTO } from '../../../DTO/users/userDTO';
 import { UserLoggedNameDTO } from '../../../DTO/users/userLoggedNameDTO';
+import { DashboardProjectDTO } from '../../../DTO/projects/DashboardProjectDTO';
+import { ReleasesService } from '../../../services/releases/releases.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-  dialog: MatDialog = inject(MatDialog);
-  snackbar: SnackbarService = inject(SnackbarService);
-  themeService: ThemeService = inject(ThemeService);
-  userService: UsersService = inject(UsersService);
-  user: UserLoggedNameDTO = { name: '', role: '' };
+export class DashboardComponent implements OnInit {
 
-  projects: Project[] = []; // Lista de projetos
+  constructor(
+    private dialog: MatDialog,
+    private snackbar: SnackbarService,
+    private themeService: ThemeService,
+    private userService: UsersService,
+    private releaseService: ReleasesService,
+    private dashboardService: DashboardService
+  ) {}
+
+  projects: DashboardProjectDTO[] = [];
   projectColumns: string[] = ['name', 'startDate', 'endDate', 'status', 'priority', 'userResponsible'];
   taskColumns: string[] = ['taskName', 'taskStartDate', 'taskEndDate', 'taskStatus'];
-  columns: string[] = ['taskId', 'description', 'startDate', 'endDate', 'actions'];
-
-  isLightTheme: boolean = false;  // Para armazenar o estado do tema
-
+  columns: string[] = ['taskName', 'description', 'dateRelease', 'startTime', 'endTime', 'actions'];
+  isLightTheme: boolean = false;
+  hoursWorked: string = '00:00';
+  user: UserLoggedNameDTO = { name: '', role: '' };
   currentDate: string = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
   });
 
-  releases: Release[] = [];
+  releases: ReleaseDTO[] = [];
 
   dataSource = new MatTableDataSource<ReleaseDTO>(this.releases);
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -58,50 +57,60 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscribeTheme(); // Inscrever no Observable do ThemeService
-    this.updateTime(); // Data/Mês na inicialização do componente Dashboard
-    this.loadProjects(); // Mockup de dados
+    this.subscribeTheme();
+    this.updateTime();
     this.getUserName();
-    // Chamar o service de projetos para atualizar a lista de projetos e suas tasks
+    this.loadProjectsAndTasksByUser();
+    this.loadHoursWorkedByUser();
+    this.loadReleasesByUserLogged();
   }
 
-  // Data do dia e mês exibidos na dashboard
+  ngOnChanges(changes: SimpleChanges): void {
+      if (changes['releases']) {
+        this.dataSource.data = this.releases;
+      }
+  }
+
   updateTime() {
     const now = new Date();
-    // Atualiza a data sempre que necessário
     this.currentDate = now.toLocaleDateString('pt-BR', {
       weekday: 'long', day: '2-digit', month: 'long'
     });
   }
 
-  loadProjects() {
-    // Simulação de dados - substituir pela chamada ao backend do services de projetos e armazenar em this.projects
+  loadProjectsAndTasksByUser() {
+    this.dashboardService.getProjectsAndTasksByUserLogged().subscribe({
+      next: (response) => {
+        this.projects = response;
+      },
+      error: () => this.snackbar.openSnackBar('Erro ao buscar projetos e tarefas do usuário!', 'error')
+    });
   }
 
-  // Função exemplo - implementar com back
+  loadHoursWorkedByUser() {
+    this.dashboardService.getHoursWorkedByUserLogged().subscribe({
+      next: (response) => {
+        console.log(response);
+        this.hoursWorked = response;
+      },
+      error: (err) => console.log(err)
+    });
+  }
+
+  loadReleasesByUserLogged() {
+    this.releaseService.getReleasesByUserLogged().subscribe({
+      next: (response) => {
+        this.dataSource.data = response;
+      },
+      error: (err) => console.log(err)
+    });
+  }
+
   getUserName(): void {
     this.userService.getUserLogged().subscribe({
       next: (response) => this.user = response,
       error: (err) => console.error('Erro ao buscar usuário logado:', err)
     });
-  }
-
-  // Carrega as tasks do projeto correspondente
-  loadTasks(projectId: number) {
-    // Busca o projeto pelo ID
-    const project = this.projects.find(p => p.id === projectId);
-
-    if (project) {
-      console.log(`Carregando tasks para o projeto: ${project.name}`);
-
-      // Simulação de carregamento de tasks
-      setTimeout(() => {
-        project.tasks = [
-          { name: "Analisar requisitos", projectId: project.id, userResponsibleId: 2, startDate: new Date('2024-02-10'), endDate: new Date('2024-02-20'), status: StatusTask.DONE },
-          { name: "Desenvolver frontend", projectId: project.id, userResponsibleId: 2, startDate: new Date('2024-02-21'), endDate: new Date('2024-03-10'), status: StatusTask.PROGRESS }
-        ];
-      }, 1000); // Simula um delay de 1 segundo para carregar as tasks
-    }
   }
 
   // Função para registrar um lançamento
@@ -165,7 +174,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Se inscrever no Observable do ThemeService, será notificado sempre que o tema mudar
   subscribeTheme(): void {
     this.themeService.isLightTheme$
-      .pipe(takeUntil(this.destroy$))  // A inscrição será descartada quando destroy$ emitir
+      .pipe()  // A inscrição será descartada quando destroy$ emitir
       .subscribe(theme => {
         this.isLightTheme = theme;  // Atualiza o valor de isLightTheme
       });
@@ -174,10 +183,5 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Alterna o tema chamando o serviço de ThemeService
   toggleTheme() {
     this.themeService.toggleTheme(); // Chama o serviço para alternar o tema
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

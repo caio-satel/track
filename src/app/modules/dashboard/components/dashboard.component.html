@@ -36,7 +36,7 @@
   <div class="container-table-project">
     <div>
       <h1>Em andamento</h1>
-      <mat-expansion-panel *ngFor="let project of projects" (opened)="loadTasks(project.id)">
+      <mat-expansion-panel *ngFor="let project of projects">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ project.name }}</mat-panel-title>
           <mat-panel-description>
@@ -55,13 +55,13 @@
           <!-- Data de Início -->
           <ng-container matColumnDef="startDate">
             <th mat-header-cell *matHeaderCellDef> Início </th>
-            <td mat-cell *matCellDef="let p"> {{ p.startDate | date:'dd/MM/yyyy' }} </td>
+            <td mat-cell *matCellDef="let p"> {{ p.startDate | date: "dd/MM/yyyy"}} </td>
           </ng-container>
 
           <!-- Data de Término -->
           <ng-container matColumnDef="endDate">
             <th mat-header-cell *matHeaderCellDef> Término </th>
-            <td mat-cell *matCellDef="let p"> {{ p.endDate | date:'dd/MM/yyyy' }} </td>
+            <td mat-cell *matCellDef="let p"> {{ p.endDate | date: "dd/MM/yyyy"}} </td>
           </ng-container>
 
           <!-- Status -->
@@ -79,7 +79,7 @@
           <!-- Usuário Responsável -->
           <ng-container matColumnDef="userResponsible">
             <th mat-header-cell *matHeaderCellDef> Responsável </th>
-            <td mat-cell *matCellDef="let p"> {{ getUserName() }} </td>
+            <td mat-cell *matCellDef="let p"> {{ p.responsibleUser.name }} </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="projectColumns"></tr>
@@ -98,13 +98,13 @@
           <!-- Data de Início da Task -->
           <ng-container matColumnDef="taskStartDate">
             <th mat-header-cell *matHeaderCellDef> Início </th>
-            <td mat-cell *matCellDef="let task"> {{ task.startDate | date:'dd/MM/yyyy' }} </td>
+            <td mat-cell *matCellDef="let task"> {{ task.startDate | date: "dd/MM/yyyy" }} </td>
           </ng-container>
 
           <!-- Data de Término da Task -->
           <ng-container matColumnDef="taskEndDate">
             <th mat-header-cell *matHeaderCellDef> Término </th>
-            <td mat-cell *matCellDef="let task"> {{ task.endDate | date:'dd/MM/yyyy' }} </td>
+            <td mat-cell *matCellDef="let task"> {{ task.endDate | date: "dd/MM/yyyy" }} </td>
           </ng-container>
 
           <!-- Status da Task -->
@@ -123,7 +123,7 @@
       <h1>Horas trabalhadas</h1>
       <mat-card class="work-time">
         <mat-icon fontIcon="more_time"></mat-icon>
-        <span>Total de horas trabalhadas: +30:00</span>
+        <span>Total de horas trabalhadas: + {{ hoursWorked }}</span>
       </mat-card>
     </div>
 
@@ -135,10 +135,9 @@
         </div>
         <table class="tbl-container" mat-table [dataSource]="dataSource" matSort>
           <!-- Responsible Column -->
-          <ng-container matColumnDef="taskId">
+          <ng-container matColumnDef="taskName">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Atividade </th>
-            <td mat-cell *matCellDef="let releases"> {{ releases.taskId }} </td>
-            <!-- Trazer o nome da atividade posteriormente, com o ID de dados -->
+            <td mat-cell *matCellDef="let releases"> {{ releases.task.name }} </td>
           </ng-container>
 
           <!-- Description Responsible Column -->
@@ -147,16 +146,22 @@
             <td mat-cell *matCellDef="let releases"> {{ releases.description }} </td>
           </ng-container>
 
+          <!-- Date Responsible Column -->
+          <ng-container matColumnDef="dateRelease">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
+            <td mat-cell *matCellDef="let releases"> {{ releases.dateRelease }} </td>
+          </ng-container>
+
           <!-- Start Date Column -->
-          <ng-container matColumnDef="startDate">
+          <ng-container matColumnDef="startTime">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Início </th>
-            <td mat-cell *matCellDef="let releases"> {{ releases.startDate | date: 'HH:mm' }} </td>
+            <td mat-cell *matCellDef="let releases"> {{ releases.startTime }} </td>
           </ng-container>
 
           <!-- End Date Column -->
-          <ng-container matColumnDef="endDate">
+          <ng-container matColumnDef="endTime">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Término </th>
-            <td mat-cell *matCellDef="let releases"> {{ releases.endDate | date: 'HH:mm' }} </td>
+            <td mat-cell *matCellDef="let releases"> {{ releases.endTime }} </td>
           </ng-container>
 
           <!-- Actions Column -->
