@@ -8,6 +8,7 @@ import { User } from '../../models/users/user';
 import { AuthService } from '../authentication/auth.service';
 import { UserLoggedNameDTO } from '../../DTO/users/userLoggedNameDTO';
 import { UpdateUserDTO } from '../../DTO/users/updateUserDTO';
+import { ChangePasswordDTO } from '../../DTO/users/ChangePasswordDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -90,5 +91,22 @@ export class UsersService {
     });
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<User>(url, { headers });
+  }
+
+  changePassword(changePasswordData: ChangePasswordDTO): Observable<ChangePasswordDTO> {
+    const token = this.auth.getToken();
+
+    if (!token) {
+      console.error('Não foi possível obter o token');
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/change-password`;
+
+    return this.http.patch<ChangePasswordDTO>(url, changePasswordData, { headers });
   }
 }
