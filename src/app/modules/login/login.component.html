@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="box-content" *ngIf="loginCard">
+  <div class="box-content">
       <div class="box-image">
           <img id="logo-desktop" src="../../../assets/logo-bg/Logo-BG-White.svg" alt="Logo">
       </div>
@@ -8,48 +8,19 @@
               <img id="logo-media-desktop" src="../../../assets/decorator/icon-decorator.svg" alt="Logo">
           </div>
           <div class="box-form-header">
-              <h1>Welcome back!</h1>
+              <h1>Bem vindo ao Trackhours!</h1>
               <span>Entre com suas credenciais</span>
           </div>
           <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
               <label for="email">Email</label>
-              <input formControlName="email" type="email" id="email" name="email" placeholder="Email">
+              <input formControlName="email" type="email" id="email" name="email" placeholder="Email" required>
 
               <label for="password">Senha</label>
-              <input formControlName="password" type="password" id="password" name="password" placeholder="Senha">
+              <input formControlName="password" type="password" id="password" name="password" placeholder="Senha" required>
 
               <button type="submit">Entrar</button>
-              <span>Não tem uma conta? <span id="btn-span" (click)="loginCard = !loginCard">Cadastre-se!</span></span>
+              <span>Esqueceu a senha? <span id="btn-span">Recupere aqui!</span></span>
           </form>
       </div>
   </div>
-
-  <div class="box-content" *ngIf="!loginCard">
-    <div class="box-image">
-        <img id="logo-desktop" src="../../../assets/logo-bg/Logo-BG-White.svg" alt="Logo"/>
-    </div>
-    <div class="box-form">
-        <div class="box-logo">
-            <img id="logo-media-desktop" src="../../../assets/decorator/icon-decorator.svg" alt="Logo">
-        </div>
-        <div class="box-form-header">
-            <h1>Crie sua conta</h1>
-            <span>Cadastre-se para acessar</span>
-        </div>
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
-            <label for="name">Nome</label>
-            <input formControlName="name" type="name" id="name" name="name" placeholder="Nome">
-
-            <label for="email">Email</label>
-            <input formControlName="email" type="email" id="email" name="email" placeholder="Email">
-
-            <label for="password">Senha</label>
-            <input formControlName="password" type="password" id="password" name="password" placeholder="Senha">
-
-            <button type="submit">Registrar</button>
-
-            <span>Já possui uma conta? <span id="btn-span" (click)="loginCard = !loginCard">Entrar já!</span></span>
-        </form>
-    </div>
-</div>
 </div>
