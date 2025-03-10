@@ -1,12 +1,14 @@
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { environment } from '../../enviroments/enviroment';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { loginRequestDTO } from '../../DTO/users/loginRequestDTO';
 import { loginResponseTokenDTO } from '../../DTO/users/loginResponseTokenDTO';
 import { AddUserDTO } from '../../DTO/users/addUserDTO';
 import { AddUserResponseDTO } from '../../DTO/users/addUserResponseDTO';
+import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -14,28 +16,56 @@ const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   providedIn: 'root'
 })
 export class AuthService {
-  http: HttpClient = inject(HttpClient);
-  CookieService: CookieService = inject(CookieService);
   private apiUrl = `${environment.api_URL}`;
   private urlLogin = `${this.apiUrl}/auth/login`;
-  private urlRegister = `${this.apiUrl}/auth/register`;
+
+  constructor(
+    private http: HttpClient,
+    private CookieService: CookieService,
+    private router: Router
+  ) {}
 
   login(data: loginRequestDTO): Observable<loginResponseTokenDTO> {
     return this.http.post<loginResponseTokenDTO>(this.urlLogin, data);
   }
 
-  register(data: AddUserDTO): Observable<AddUserResponseDTO> {
-    return this.http.post<AddUserResponseDTO>(this.urlRegister, data, { headers });
-  }
-
   isLoggedIn(): boolean {
-    // Verifica se o token/cookie está presente ou não
-    const token = this.CookieService.get('token');
-    return !!token; // Mesma coisa que: token ? true : false;
+    const token = this.getToken();
+    if (!token) return false;
+
+    if (this.isTokenExpired(token)) {
+      this.logout();
+      return false;
+    }
+
+    return true;
   }
 
   getToken(): string | null {
-    const token = this.CookieService.get('token');
-    return token;
+    return this.CookieService.get('token');
+  }
+
+  logout(): void {
+    this.CookieService.delete('token');
+    this.router.navigate(['/login']);
+  }
+
+  private isTokenExpired(token: string): boolean {
+    const payload = this.decodeToken(token);
+    if (!payload || !payload.exp) return true;
+
+    const expirationDate = new Date(0);
+    expirationDate.setUTCSeconds(payload.exp);
+
+    return expirationDate.valueOf() < new Date().valueOf();
+  }
+
+  private decodeToken(token: string): any {
+    try {
+      return jwtDecode(token);
+    } catch (error) {
+      console.error('Error decoding token', error);
+      return null;
+    }
   }
 }
