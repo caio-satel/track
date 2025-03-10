@@ -35,10 +35,16 @@ export class UsersComponent implements OnInit {
       next: (response) => {
         if(response) {
           this.users = [...this.users, response];
+          this.snackbar.openSnackBar('Usuário cadastrado com sucesso!', 'success');
         }
-        this.snackbar.openSnackBar('Usuário cadastrado com sucesso!', 'success');
       },
-      error: () => this.snackbar.openSnackBar('Erro ao cadastrar usuário!', 'error')
+      error: (err) => {
+        if (err.status === 409) {
+          this.snackbar.openSnackBar('E-mail já cadastrado!', 'error');
+        } else {
+          this.snackbar.openSnackBar('Erro ao cadastrar usuário!', 'error');
+        }
+      }
     });
   }
 
@@ -59,10 +65,8 @@ export class UsersComponent implements OnInit {
 
   onUserDeleted(userId: number) {
     this.userServices.deleteUser(userId).subscribe({
-      next: (response) => {
-        if(response) {
-          this.users = this.users.filter(user => user.id !== userId);
-        }
+      next: () => {
+        this.users = this.users.filter(user => user.id !== userId);
         this.snackbar.openSnackBar('Usuário excluído com sucesso!', 'success');
       },
       error: () => this.snackbar.openSnackBar('Erro ao excluir usuário!', 'error')
