@@ -105,7 +105,6 @@ button.button-release {
   font-size: 1.2rem;
   font-weight: 500;
   padding: 20px;
-  border-radius: 10px;
   background-color: var(--secondary-color);
 }
 
@@ -205,16 +204,25 @@ td {
   color: var(--bg-secondary) !important;
 }
 
-.work-time {
+.work-time,
+.late-tasks {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  padding: 20px;
+  padding: 18px;
   font-size: 1.2rem;
   font-weight: 500;
   background: linear-gradient(135deg, #111313 70%, #98e5dd84 50%, #eeb58f77 90%);
   color: #FFF;
+}
+
+.work-time {
+  margin-bottom: 24px;
+}
+
+.late-tasks mat-icon {
+  color: var(--primary-color);
 }
 
 ::ng-deep .light-theme .work-time span {
@@ -247,18 +255,38 @@ td {
 }
 
 .table-releases .tbl-container {
-  background-color: var(--bg-primary);
+  background-color: var(--bg-tertiary);
   border-radius: 0px;
 }
 
 .table-releases .tbl-container .button-edit {
-  background-color: var(--primary-color);
-  margin-right: 10px;
+  background-color: var(--bg-tertiary);
+  color: var(--primary-color);
+  border: none;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.table-releases .tbl-container .button-delete {
+  background-color: var(--bg-tertiary);
+  color: rgb(236, 109, 109);
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.table-releases .tbl-container .button-delete:hover {
+  color: rgb(238, 134, 134);
+}
+
+.table-releases .tbl-container .button-edit:hover {
+  color: #eeb58f77;
 }
 
 .table-releases mat-paginator {
   border-radius: 0 0 10px 10px;
-  background-color: var(--bg-primary);
+  background-color: var(--bg-tertiary);
   color: var(--text-primary);
 }
 
