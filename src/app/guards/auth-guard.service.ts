@@ -16,7 +16,6 @@ export class AuthGuard {
       return false;
     }
 
-    this.AuthService.isLoggedIn();
     return true;
   }
 }
