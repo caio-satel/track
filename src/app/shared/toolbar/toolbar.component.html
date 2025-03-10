@@ -1,23 +1,36 @@
 <mat-toolbar>
-  <a class="logo" routerLink="/dashboard">
-    @if (!isLightTheme) {
-      <img src="../../../assets/logo-text/logo-text-white-cyan.svg" width="170" alt="Logo Trackhours branco">
-    } @else {
-      <img src="../../../assets/logo-text/logo-text-black-orange.svg" width="170" alt="Logo Trackhours preto">
-    }
-  </a>
+  <div class="toolbar-header">
+    <a class="logo" routerLink="/dashboard">
+      @if (!isLightTheme) {
+        <img src="../../../assets/logo-text/logo-text-white-cyan.svg" width="170" alt="Logo Trackhours branco">
+      } @else {
+        <img src="../../../assets/logo-text/logo-text-black-orange.svg" width="170" alt="Logo Trackhours preto">
+      }
+    </a>
+
+    <mat-icon class="btn-menu" fontIcon="menu">
+      <span>Menu</span>
+    </mat-icon>
+  </div>
 
   @if (userLogged?.role === 'ADMIN') {
-    <mat-list class="toolbar-content">
+    <mat-list class="toolbar-nav">
       <li><a routerLink="/users">Usuários</a></li>
       <li><a routerLink="/projects">Projetos</a></li>
-      <li><a routerLink="/tasks">Tasks</a></li>
-      <li><a routerLink="/releases">Lançamentos</a></li>
+      <li><a routerLink="/tasks">Atividades</a></li>
+      <li><a routerLink="/releases">Lançamento de Horas</a></li>
     </mat-list>
   }
 
-  <button mat-button class="btn-logout" (click)="logout()">
-    <mat-icon fontIcon="logout"></mat-icon>
-    Sair
-  </button>
+  <div class="toolbar-settings">
+    <div class="settings-user">
+      <span>{{ userLogged?.name }}</span>
+      <mat-icon class="btn-profile" title="Alterar senha" fontIcon="manage_accounts" (click)="openChangePasswordDialog(changePassword, '200ms', '200ms')"></mat-icon>
+    </div>
+
+    <button mat-button class="btn-logout" (click)="logout()">
+      <mat-icon fontIcon="logout"></mat-icon>
+      <span>Sair</span>
+    </button>
+  </div>
 </mat-toolbar>
