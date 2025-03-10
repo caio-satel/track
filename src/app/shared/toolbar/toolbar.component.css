@@ -2,6 +2,7 @@
   display: block;
   background-color: var(--bg-secondary);
 }
+
 mat-toolbar {
   background-color: var(--bg-secondary);
   display: flex;
@@ -13,30 +14,89 @@ mat-toolbar {
   padding: 0;
 }
 
-.logo {
-  height: 100%;
-}
-
-.logo img {
-  height: 100%;
-}
-
-.toolbar-content {
+.toolbar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 25px;
 }
 
-.toolbar-content a {
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.btn-menu {
+  display: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.btn-profile {
+  color: var(--text-primary);
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.toolbar-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  font-size: 1rem;
+}
+
+.toolbar-nav a {
   color: var(--text-primary);
   text-decoration: none;
 }
 
-.toolbar-content a:hover {
+.toolbar-nav a:hover {
   color: var(--primary-color);
 }
 
-button.btn-logout {
+.toolbar-settings {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.settings-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-user span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.settings-user .btn-profile {
+  transition: .5s;
+}
+
+.settings-user .btn-profile:hover{
+  color: var(--primary-color);
+}
+
+.btn-logout {
   background-color: var(--primary-color);
+}
+
+@media (max-width: 950px) {
+  .toolbar-nav {
+    gap: 15px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .toolbar-nav {
+    display: none;
+  }
+  .btn-menu {
+    display: block;
+  }
 }
