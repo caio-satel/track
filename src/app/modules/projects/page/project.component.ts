@@ -44,10 +44,10 @@ export class ProjectComponent {
 
   onProjectEdited(updatedProject: UpdateProjectDTO) {
     this.projectService.updateProject(updatedProject.id, updatedProject).subscribe({
-      next: () => {
+      next: (response) => {
         this.projects = this.projects.map(project => {
           if (project.id === updatedProject.id) {
-            return { ...project, ...updatedProject};
+            return { ...project, ...response};
           }
           return project;
         });
