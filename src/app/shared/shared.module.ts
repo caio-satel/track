@@ -1,3 +1,4 @@
+import { MatMenuModule } from '@angular/material/menu';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,11 +11,16 @@ import { MatListModule } from '@angular/material/list';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { MatDialogActions, MatDialogClose, MatDialogModule, MatDialogTitle } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
+import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
     ToolbarComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ChangePasswordDialogComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +34,12 @@ import { MatCardModule } from '@angular/material/card';
     MatDialogTitle,
     MatDialogActions,
     MatDialogClose,
-    MatCardModule
+    MatCardModule,
+    MatMenuModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule
   ],
   exports: [
     ToolbarComponent, ConfirmDialogComponent, MatDialogModule
