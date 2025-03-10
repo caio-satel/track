@@ -13,6 +13,8 @@ import { UsersService } from '../../../services/users/users.service';
 import { UserLoggedNameDTO } from '../../../DTO/users/userLoggedNameDTO';
 import { DashboardProjectDTO } from '../../../DTO/projects/DashboardProjectDTO';
 import { ReleasesService } from '../../../services/releases/releases.service';
+import { UpdateReleaseDTO } from '../../../DTO/releases/UpdateReleaseDTO';
+import { LateTasksCountDTO } from '../../../DTO/dashboard/LateTasksCountDTO';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,9 +35,10 @@ export class DashboardComponent implements OnInit {
   projects: DashboardProjectDTO[] = [];
   projectColumns: string[] = ['name', 'startDate', 'endDate', 'status', 'priority', 'userResponsible'];
   taskColumns: string[] = ['taskName', 'taskStartDate', 'taskEndDate', 'taskStatus'];
-  columns: string[] = ['taskName', 'description', 'dateRelease', 'startTime', 'endTime', 'actions'];
+  columns: string[] = ['description', 'releaseName', 'dateRelease', 'startTime', 'endTime', 'actions'];
   isLightTheme: boolean = false;
   hoursWorked: string = '00:00';
+  lateTasks: LateTasksCountDTO = { lateTasksCount: 0 };
   user: UserLoggedNameDTO = { name: '', role: '' };
   currentDate: string = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
@@ -63,6 +66,7 @@ export class DashboardComponent implements OnInit {
     this.loadProjectsAndTasksByUser();
     this.loadHoursWorkedByUser();
     this.loadReleasesByUserLogged();
+    this.loadLateTasksByUserLogged();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -90,10 +94,9 @@ export class DashboardComponent implements OnInit {
   loadHoursWorkedByUser() {
     this.dashboardService.getHoursWorkedByUserLogged().subscribe({
       next: (response) => {
-        console.log(response);
         this.hoursWorked = response;
       },
-      error: (err) => console.log(err)
+      error: () => this.snackbar.openSnackBar('Erro ao buscar horas trabalhadas!', 'error')
     });
   }
 
@@ -102,30 +105,51 @@ export class DashboardComponent implements OnInit {
       next: (response) => {
         this.dataSource.data = response;
       },
-      error: (err) => console.log(err)
+      error: () => this.snackbar.openSnackBar('Erro ao buscar lançamentos!', 'error')
+    });
+  }
+
+  loadLateTasksByUserLogged() {
+    this.dashboardService.getLateTasksByUserLogged().subscribe({
+      next: (response) => {
+        this.lateTasks = response;
+      },
+      error: () => this.snackbar.openSnackBar('Erro ao buscar tarefas atrasadas!', 'error')
     });
   }
 
   getUserName(): void {
     this.userService.getUserLogged().subscribe({
       next: (response) => this.user = response,
-      error: (err) => console.error('Erro ao buscar usuário logado:', err)
+      error: () => this.snackbar.openSnackBar('Erro ao buscar usuário logado!', 'error')
     });
   }
 
-  // Função para registrar um lançamento
   registerRelease(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    this.dialog.open(ReleasesFormComponent, {
+    const dialogRef = this.dialog.open(ReleasesFormComponent, {
       width: '350px',
       enterAnimationDuration,
       exitAnimationDuration
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.releaseService.createRelease(result).subscribe({
+          next: (response) => {
+            if(response) {
+              this.dataSource.data = [...this.dataSource.data, response];
+            }
+            this.snackbar.openSnackBar('Lançamento registrado com sucesso!', 'success');
+          },
+          error: () => this.snackbar.openSnackBar('Erro ao registrar lançamento!', 'error')
+        });
+      }
+    });
   }
 
   // Função para editar uma release
-  openEditDialog(release: ReleaseDTO, enterAnimationDuration: string, exitAnimationDuration: string): void {
-    console.log(release);
-    this.dialog.open(ReleasesFormComponent, {
+  openEditDialog(release: UpdateReleaseDTO, enterAnimationDuration: string, exitAnimationDuration: string): void {
+    const dialogRef = this.dialog.open(ReleasesFormComponent, {
       width: '350px',
       enterAnimationDuration,
       exitAnimationDuration,
@@ -133,43 +157,64 @@ export class DashboardComponent implements OnInit {
         release
       }
     });
-  }
 
-  // Função para abrir o dialog de confirmação
-  openDeleteDialog(releaseId: number, enterAnimationDuration: string, exitAnimationDuration: string): void {
-    // console.log('entrou na função', releaseId);
-    // Busca o release na lista pelo ID
-    const release = this.releases.find(r => r.id === releaseId);
-
-    if (!release) {
-      // Se a release não existir na lista, exibe uma mensagem de erro
-      this.snackbar.openSnackBar('Release não encontrada!', 'warning');
-    }
-
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '350px',
-      data: {
-        title: 'Excluir Release',
-        message: `Tem certeza que deseja excluir ${release.description}?`, // Nome dinâmico
-        enterAnimationDuration,
-        exitAnimationDuration
-      }
-    });
-
-    // Se o dialog for confirmar, chamamos a função de exclusão
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.deleteRelease(releaseId);
+        this.releaseService.updateRelease(result.id, result as UpdateReleaseDTO).subscribe({
+          next: (response) => {
+            if (response) {
+              this.dataSource.data = this.dataSource.data.map(release => {
+                if (release.id === result.id) {
+                  return { ...release, ...result };
+                }
+                return release;
+              });
+              this.snackbar.openSnackBar('Lançamento atualizado com sucesso!', 'success');
+              this.loadHoursWorkedByUser();
+            }
+          },
+          error: () => this.snackbar.openSnackBar('Erro ao atualizar lançamento!', 'error')
+        });
       }
     });
+
   }
 
-  // Função para excluir uma release
-  deleteRelease(releaseId: number) {
-    // console.log('Release excluída:', releaseId);
-    this.snackbar.openSnackBar('Release excluída com sucesso!', 'success');
-    // Chamar o service para excluir a release no backend
-  }
+  // // Função para abrir o dialog de confirmação
+  // openDeleteDialog(releaseId: number, enterAnimationDuration: string, exitAnimationDuration: string): void {
+  //   // console.log('entrou na função', releaseId);
+  //   // Busca o release na lista pelo ID
+  //   const release = this.releases.find(r => r.id === releaseId);
+
+  //   if (!release) {
+  //     // Se a release não existir na lista, exibe uma mensagem de erro
+  //     this.snackbar.openSnackBar('Release não encontrada!', 'warning');
+  //   }
+
+  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+  //     width: '350px',
+  //     data: {
+  //       title: 'Excluir Release',
+  //       message: `Tem certeza que deseja excluir ${release.description}?`, // Nome dinâmico
+  //       enterAnimationDuration,
+  //       exitAnimationDuration
+  //     }
+  //   });
+
+  //   // Se o dialog for confirmar, chamamos a função de exclusão
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result) {
+  //       this.deleteRelease(releaseId);
+  //     }
+  //   });
+  // }
+
+  // // Função para excluir uma release
+  // deleteRelease(releaseId: number) {
+  //   // console.log('Release excluída:', releaseId);
+  //   this.snackbar.openSnackBar('Release excluída com sucesso!', 'success');
+  //   // Chamar o service para excluir a release no backend
+  // }
 
   // Se inscrever no Observable do ThemeService, será notificado sempre que o tema mudar
   subscribeTheme(): void {
