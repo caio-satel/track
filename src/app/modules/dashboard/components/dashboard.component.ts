@@ -1,5 +1,5 @@
 import { DashboardService } from './../../../services/dashboard/dashboard.service';
-import { Component,OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component,ElementRef,OnInit, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { ThemeService } from '../../../services/theme-service/theme-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReleasesFormComponent } from '../../releases/components/releases-form/releases-form.component';
@@ -15,6 +15,10 @@ import { DashboardProjectDTO } from '../../../DTO/projects/DashboardProjectDTO';
 import { ReleasesService } from '../../../services/releases/releases.service';
 import { UpdateReleaseDTO } from '../../../DTO/releases/UpdateReleaseDTO';
 import { LateTasksCountDTO } from '../../../DTO/dashboard/LateTasksCountDTO';
+import { TaskDTO } from '../../../DTO/tasks/taskDTO';
+import { TasksService } from '../../../services/tasks/tasks.service';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { ProjectDTO } from '../../../DTO/projects/projectDTO';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,7 +33,8 @@ export class DashboardComponent implements OnInit {
     private themeService: ThemeService,
     private userService: UsersService,
     private releaseService: ReleasesService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private taskService: TasksService
   ) {}
 
   projects: DashboardProjectDTO[] = [];
@@ -38,13 +43,17 @@ export class DashboardComponent implements OnInit {
   columns: string[] = ['description', 'releaseName', 'dateRelease', 'startTime', 'endTime', 'actions'];
   isLightTheme: boolean = false;
   hoursWorked: string = '00:00';
-  lateTasks: LateTasksCountDTO = { lateTasksCount: 0 };
+  lateTasksCount: LateTasksCountDTO = { lateTasksCount: 0 };
   user: UserLoggedNameDTO = { name: '', role: '' };
   currentDate: string = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
   });
 
   releases: ReleaseDTO[] = [];
+  listLateTasks: TaskDTO[] = [];
+
+  @ViewChildren(MatExpansionPanel) expansionPanels: QueryList<MatExpansionPanel>; // Lista de expansion panels
+  @ViewChildren('taskRow') taskRows: QueryList<ElementRef>; // Lista de elementos filho de tarefas - Linhas da tabela de tarefas
 
   dataSource = new MatTableDataSource<ReleaseDTO>(this.releases);
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -104,15 +113,16 @@ export class DashboardComponent implements OnInit {
     this.releaseService.getReleasesByUserLogged().subscribe({
       next: (response) => {
         this.dataSource.data = response;
+        this.releases = response;
       },
       error: () => this.snackbar.openSnackBar('Erro ao buscar lançamentos!', 'error')
     });
   }
 
   loadLateTasksByUserLogged() {
-    this.dashboardService.getLateTasksByUserLogged().subscribe({
+    this.dashboardService.getLateTasksCountByUserLogged().subscribe({
       next: (response) => {
-        this.lateTasks = response;
+        this.lateTasksCount = response;
       },
       error: () => this.snackbar.openSnackBar('Erro ao buscar tarefas atrasadas!', 'error')
     });
@@ -140,6 +150,8 @@ export class DashboardComponent implements OnInit {
               this.dataSource.data = [...this.dataSource.data, response];
             }
             this.snackbar.openSnackBar('Lançamento registrado com sucesso!', 'success');
+            this.loadHoursWorkedByUser();
+            this.loadReleasesByUserLogged();
           },
           error: () => this.snackbar.openSnackBar('Erro ao registrar lançamento!', 'error')
         });
@@ -171,50 +183,94 @@ export class DashboardComponent implements OnInit {
               });
               this.snackbar.openSnackBar('Lançamento atualizado com sucesso!', 'success');
               this.loadHoursWorkedByUser();
+              this.loadReleasesByUserLogged();
             }
           },
           error: () => this.snackbar.openSnackBar('Erro ao atualizar lançamento!', 'error')
         });
       }
     });
-
   }
 
-  // // Função para abrir o dialog de confirmação
-  // openDeleteDialog(releaseId: number, enterAnimationDuration: string, exitAnimationDuration: string): void {
-  //   // console.log('entrou na função', releaseId);
-  //   // Busca o release na lista pelo ID
-  //   const release = this.releases.find(r => r.id === releaseId);
+  // Função para abrir o dialog de confirmação
+  openDeleteDialog(releaseId: number, enterAnimationDuration: string, exitAnimationDuration: string): void {
+    const release = this.releases.find(r => r.id === releaseId);
 
-  //   if (!release) {
-  //     // Se a release não existir na lista, exibe uma mensagem de erro
-  //     this.snackbar.openSnackBar('Release não encontrada!', 'warning');
-  //   }
+    if (!release) {
+      return this.snackbar.openSnackBar('Lançamento não encontrado ou excluída!', 'warning');
+    }
 
-  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-  //     width: '350px',
-  //     data: {
-  //       title: 'Excluir Release',
-  //       message: `Tem certeza que deseja excluir ${release.description}?`, // Nome dinâmico
-  //       enterAnimationDuration,
-  //       exitAnimationDuration
-  //     }
-  //   });
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Excluir Lançamento',
+        message: `Tem certeza que deseja excluir ${release.description}?`,
+        enterAnimationDuration,
+        exitAnimationDuration
+      }
+    });
 
-  //   // Se o dialog for confirmar, chamamos a função de exclusão
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.deleteRelease(releaseId);
-  //     }
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.releaseService.deleteRelease(releaseId).subscribe({
+          next: () => {
+            this.dataSource.data = this.dataSource.data.filter(release => release.id !== releaseId);
+            this.snackbar.openSnackBar('Lançamento excluído com sucesso!', 'success');
+          },
+          error: () => this.snackbar.openSnackBar('Erro ao excluir lançamento!', 'error')
+        });
+      }
+      this.loadHoursWorkedByUser();
+      this.loadReleasesByUserLogged();
+    });
+  }
 
-  // // Função para excluir uma release
-  // deleteRelease(releaseId: number) {
-  //   // console.log('Release excluída:', releaseId);
-  //   this.snackbar.openSnackBar('Release excluída com sucesso!', 'success');
-  //   // Chamar o service para excluir a release no backend
-  // }
+  findAndHighlightLateTask(): void {
+    this.taskService.getLateTasksByUser().subscribe({
+      next: (tasks) => {
+        this.listLateTasks = tasks;
+        this.highlightLateTasks();
+      },
+      error: (error) => {
+        console.error('Erro ao buscar tarefas atrasadas:', error);
+      }
+    });
+  }
+
+  highlightLateTasks() {
+    // Itera sobre as tarefas atrasadas
+    this.listLateTasks.forEach(lateTask => {
+      // Encontra o projeto correspondente à tarefa atrasada
+      const projectIndex = this.projects.findIndex(p => p.tasks.some(t => t.id === lateTask.id));
+      if (projectIndex !== -1) {
+        // Abre o expansion panel do projeto
+        this.openExpansionPanel(projectIndex);
+
+        // Destaca a tarefa atrasada
+        this.highlightTask(lateTask.id);
+      }
+    });
+  }
+
+  openExpansionPanel(projectIndex: number) {
+    const panels = this.expansionPanels.toArray();
+    if (panels[projectIndex]) {
+      panels[projectIndex].open(); // Abre o expansion panel
+    }
+  }
+
+  highlightTask(taskId: number) {
+    const taskRows = this.taskRows.toArray();
+    const taskRow = taskRows.find(row => row.nativeElement.getAttribute('data-task-id') === taskId.toString());
+
+    if (taskRow) {
+      taskRow.nativeElement.classList.add('late-task');
+    }
+  }
+
+  isTaskLate(task: any): boolean {
+    return this.listLateTasks.some(t => t.id === task.id);
+  }
 
   // Se inscrever no Observable do ThemeService, será notificado sempre que o tema mudar
   subscribeTheme(): void {
