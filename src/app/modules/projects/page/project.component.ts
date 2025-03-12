@@ -53,19 +53,39 @@ export class ProjectComponent {
         });
         this.snackbar.openSnackBar('Projeto atualizado com sucesso!', 'success');
       },
-      error: () => this.snackbar.openSnackBar('Erro ao atualizar projeto!', 'error')
+      error: (err) => {
+        if (err.status === 404) {
+          // Erro de projeto não encontrado
+          this.snackbar.openSnackBar('Projeto não encontrado!', 'error');
+        } else if (err.status === 400) {
+          // Erro de projeto não concluído
+          this.snackbar.openSnackBar('O projeto não pode ser concluído porque há tarefas pendentes.', 'warning');
+        } else if (err.status === 500) {
+          // Erro interno do servidor
+          this.snackbar.openSnackBar('Erro ao excluir projeto!', 'error');
+        }
+      }
     });
   }
 
   onProjectDeleted(projectId: number) {
     this.projectService.deleteProject(projectId).subscribe({
-      next: (response) => {
-        if (response) {
-          this.projects = this.projects.filter(project => project.id !== projectId);
-        }
+      next: () => {
+        this.projects = this.projects.filter(project => project.id !== projectId);
         this.snackbar.openSnackBar('Projeto excluído com sucesso!', 'success');
       },
-      error: () => this.snackbar.openSnackBar('Erro ao excluir projeto!', 'error')
+      error: (err) => {
+        if (err.status === 404) {
+          // Erro de projeto não encontrado
+          this.snackbar.openSnackBar('Projeto não encontrado!', 'error');
+        } else if (err.status === 400) {
+          // Erro de projeto não concluído
+          this.snackbar.openSnackBar('O projeto não pode ser excluído porque não está concluído ou há tarefas pendentes.', 'error');
+        } else if (err.status === 500) {
+          // Erro interno do servidor
+          this.snackbar.openSnackBar('Erro ao excluir projeto!', 'error');
+        }
+      }
     });
   }
 }
