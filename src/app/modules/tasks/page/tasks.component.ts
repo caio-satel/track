@@ -37,50 +37,56 @@ export class TasksComponent {
           this.snackbar.openSnackBar('Tarefa criada com sucesso!', 'success');
         }
       },
-      error: () => this.snackbar.openSnackBar('Erro ao criar tarefa!', 'error')
+      error: (err) => {
+        if (err.status === 404) {
+          // Erro de projeto não encontrado
+          this.snackbar.openSnackBar('Projeto não encontrado!', 'error');
+        } else if (err.status === 400) {
+          // Erro de datas inválidas
+          this.snackbar.openSnackBar('Datas da tarefa fora do intervalo do projeto.', 'warning');
+        } else {
+          // Erro genérico
+          this.snackbar.openSnackBar('Erro ao criar tarefa!', 'error');
+        }
+      }
     });
   }
 
   onTaskEdited(updatedTask: UpdateTaskDTO) {
     this.taskService.updateTask(updatedTask.id, updatedTask).subscribe({
-      next: () => {
-        // Converte as datas de dd/MM/yyyy para Date
-        const startDate = this.convertToDate(updatedTask.startDate);
-        const endDate = this.convertToDate(updatedTask.endDate);
-
-        this.tasks = this.tasks.map(task => {
-          if (task.id === updatedTask.id) {
-            return {
-              ...task,
-              ...updatedTask,
-              startDate: startDate,
-              endDate: endDate
-            };
-          }
-          return task;
-        });
-
-        this.snackbar.openSnackBar('Tarefa atualizada com sucesso!', 'success');
+      next: (response) => {
+        if (response) {
+          this.tasks = this.tasks.map(task => {
+            if (task.id === updatedTask.id) {
+              return { ...task, ...response };
+            }
+            return task;
+          });
+          this.snackbar.openSnackBar('Tarefa atualizada com sucesso!', 'success');
+        }
       },
       error: () => this.snackbar.openSnackBar('Erro ao atualizar tarefa!', 'error')
     });
   }
 
-  // Função para converter dd/MM/yyyy para Date
-  convertToDate(dateString: string): Date {
-    const [day, month, year] = dateString.split('/');
-    return new Date(+year, +month - 1, +day);
-  }
-
   onTaskDeleted(taskId: number) {
     this.taskService.deleteTask(taskId).subscribe({
-      next: (response) => {
-        if (response) {
-          this.tasks = this.tasks.filter(task => task.id !== taskId);
-          this.snackbar.openSnackBar('Tarefa excluída com sucesso!', 'success');
-        }
+      next: () => {
+        this.tasks = this.tasks.filter(task => task.id !== taskId);
+        this.snackbar.openSnackBar('Tarefa excluída com sucesso!', 'success');
       },
-      error: () => this.snackbar.openSnackBar('Erro ao excluir tarefa!', 'error')
+      error: (err) => {
+        if (err.status === 404) {
+          // Erro de tarefa não encontrada
+          this.snackbar.openSnackBar('Tarefa não encontrada!', 'error');
+        } else if (err.status === 400) {
+          // Erro de tarefa não concluída
+          this.snackbar.openSnackBar('A tarefa não pode ser excluída porque não está concluída.', 'warning');
+        } else {
+          // Erro genérico
+          this.snackbar.openSnackBar('Erro ao excluir tarefa!', 'error');
+        }
+      }
     });
   }
 }
