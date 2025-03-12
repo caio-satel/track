@@ -36,7 +36,10 @@
   <div class="container-table-project">
     <div>
       <h1>Em andamento</h1>
-      <mat-expansion-panel *ngFor="let project of projects">
+      <div *ngIf="projects.length === 0;">
+        <p id="not-tasks">Você não possui tarefas no momento.</p>
+      </div>
+      <mat-expansion-panel *ngFor="let project of projects; let i = index" #expansionPanel>
         <mat-expansion-panel-header>
           <mat-panel-title>{{ project.name }}</mat-panel-title>
           <mat-panel-description>
@@ -112,25 +115,25 @@
           <!-- Nome da Task -->
           <ng-container matColumnDef="taskName">
             <th mat-header-cell *matHeaderCellDef> Nome </th>
-            <td mat-cell *matCellDef="let task"> {{ task.name }} </td>
+            <td mat-cell *matCellDef="let task; let j = index" #taskRow [attr.data-task-id]="task.id" [class.late-task]="isTaskLate(task)"> {{ task.name }} </td>
           </ng-container>
 
           <!-- Data de Início da Task -->
           <ng-container matColumnDef="taskStartDate">
             <th mat-header-cell *matHeaderCellDef> Início </th>
-            <td mat-cell *matCellDef="let task"> {{ task.startDate | date: "dd/MM/yyyy" }} </td>
+            <td mat-cell *matCellDef="let task; let j = index" #taskRow [attr.data-task-id]="task.id" [class.late-task]="isTaskLate(task)"> {{ task.startDate | date: "dd/MM/yyyy" }} </td>
           </ng-container>
 
           <!-- Data de Término da Task -->
           <ng-container matColumnDef="taskEndDate">
             <th mat-header-cell *matHeaderCellDef> Término </th>
-            <td mat-cell *matCellDef="let task"> {{ task.endDate | date: "dd/MM/yyyy" }} </td>
+            <td mat-cell *matCellDef="let task; let j = index" #taskRow [attr.data-task-id]="task.id" [class.late-task]="isTaskLate(task)"> {{ task.endDate | date: "dd/MM/yyyy" }} </td>
           </ng-container>
 
           <!-- Status da Task -->
           <ng-container matColumnDef="taskStatus">
             <th mat-header-cell *matHeaderCellDef> Status </th>
-            <td mat-cell *matCellDef="let task">
+            <td mat-cell *matCellDef="let task; let j = index" #taskRow [attr.data-task-id]="task.id" [class.late-task]="isTaskLate(task)">
               @if(task.status === 'OPEN') {
                 <span>Aberta</span>
               } @else if(task.status === 'PROGRESS') {
@@ -160,13 +163,14 @@
         <h1>Atividades atrasadas</h1>
         <mat-card class="late-tasks">
           <mat-icon fontIcon="warning"></mat-icon>
-          @if (lateTasks.lateTasksCount == 1) {
-            <span>Você possui {{ lateTasks.lateTasksCount }} atividade atrasada</span>
-          } @else if (lateTasks.lateTasksCount > 1) {
-            <span>Você possui {{ lateTasks.lateTasksCount }} atividades atrasadas</span>
+          @if (lateTasksCount.lateTasksCount == 1) {
+            <span>Você possui {{ lateTasksCount.lateTasksCount }} atividade atrasada</span>
+          } @else if (lateTasksCount.lateTasksCount > 1) {
+            <span>Você possui {{ lateTasksCount.lateTasksCount }} atividades atrasadas</span>
           } @else {
             <span>Você não possui atividades atrasadas</span>
           }
+          <a (click)="findAndHighlightLateTask()">Ver mais</a>
         </mat-card>
       </div>
     </div>
@@ -216,7 +220,7 @@
                 <mat-icon fontIcon="edit"></mat-icon>
               </button>
               <button mat-mini class="button-delete">
-                <mat-icon fontIcon="delete"></mat-icon>
+                <mat-icon fontIcon="delete" (click)="openDeleteDialog(releases.id, '200ms', '200ms')"></mat-icon>
               </button>
             </td>
           </ng-container>
