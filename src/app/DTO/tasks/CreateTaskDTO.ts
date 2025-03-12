@@ -1,7 +1,7 @@
 export interface CreateTaskDTO {
   name: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   projectId: number;
   userResponsibleId?: number;
   collaborators: number[];
