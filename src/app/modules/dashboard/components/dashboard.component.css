@@ -148,6 +148,12 @@ h1 {
   margin-bottom: 20px;
 }
 
+#not-tasks {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
 mat-expansion-panel {
   background-color: var(--bg-secondary);
   margin-bottom: 8px;
@@ -223,6 +229,21 @@ td {
 
 .late-tasks mat-icon {
   color: var(--primary-color);
+}
+
+.late-tasks a {
+  margin-left: auto;
+  color: var(--text-primary);
+  font-size: .875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.late-task {
+  background-color: #e4bca8;
+  font-weight: 700;
+  color: var(--bg-primary);
 }
 
 ::ng-deep .light-theme .work-time span {
