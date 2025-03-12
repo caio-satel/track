@@ -51,6 +51,21 @@ export class TasksService {
     return this.http.get<TaskDTO[]>(`${this.apiUrl}/byUser`, { headers });
   }
 
+  getLateTasksByUser(): Observable<TaskDTO[]> {
+    const token = this.auth.getToken();
+
+    if (!token) {
+      console.error('Não foi possível obter o token');
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<TaskDTO[]>(`${this.apiUrl}/late-tasks`, { headers });
+  }
+
   // GET - Buscar task filtrada por ID
   getTaskById(id: number): Observable<TaskDTO> {
     const url = `${this.apiUrl}/${id}`;
