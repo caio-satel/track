@@ -50,7 +50,7 @@ export class DashboardService {
     return this.http.get<{ totalHours: string }>(url, { headers }).pipe(map(response => response.totalHours));
   }
 
-  getLateTasksByUserLogged(): Observable<LateTasksCountDTO> {
+  getLateTasksCountByUserLogged(): Observable<LateTasksCountDTO> {
     if (!this.token) {
       console.error('Não foi possível obter o token');
     }
