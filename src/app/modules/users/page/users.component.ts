@@ -69,7 +69,15 @@ export class UsersComponent implements OnInit {
         this.users = this.users.filter(user => user.id !== userId);
         this.snackbar.openSnackBar('Usuário excluído com sucesso!', 'success');
       },
-      error: () => this.snackbar.openSnackBar('Erro ao excluir usuário!', 'error')
+      error: (err) => {
+        if (err.status === 404) {
+          this.snackbar.openSnackBar('Usuário não encontrado ou já foi excluído.', 'error');
+        } else if (err.status === 400) {
+          this.snackbar.openSnackBar('Não é possível excluir o usuário. Ele é responsável por um ou mais projetos.', 'warning');
+        } else {
+          this.snackbar.openSnackBar('Erro interno no servidor. Tente novamente mais tarde.', 'error');
+        }
+      }
     });
   }
 }
