@@ -60,7 +60,7 @@ export class ProjectsFormComponent {
   }
 
   listUsers(): void {
-    this.userService.getUsers().subscribe({
+    this.userService.getUsersAdmins().subscribe({
       next: (users) => {
         this.users = users;
       },
@@ -123,7 +123,7 @@ export class ProjectsFormComponent {
       priority: this.editProjectForm.value.priority as Priority,
       status: this.editProjectForm.value.status as StatusProject
     };
-    
+
     this.dialogRef.close(updateData);
   }
 }
