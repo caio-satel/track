@@ -40,6 +40,8 @@ export class LoginComponent {
         error: (err: HttpErrorResponse) => {
           if (err.status === 401) {
             this.snackbar.openSnackBar('E-mail ou senha incorretos!', 'error');
+          } else if (err.status === 404) {
+            this.snackbar.openSnackBar('E-mail não cadastrado!', 'error');
           } else {
             this.snackbar.openSnackBar('Erro ao realizar login!', 'error');
           }
