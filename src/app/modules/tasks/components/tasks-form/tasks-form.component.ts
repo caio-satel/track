@@ -98,7 +98,6 @@ export class TasksFormComponent implements OnInit {
   }
 
   addTask(): void {
-    console.log(this.newTaskForm);
     if (!this.newTaskForm.valid) {
       return this.snackbar.openSnackBar('Preencha todos os campos corretamente!', 'warning');
     }
@@ -126,15 +125,13 @@ export class TasksFormComponent implements OnInit {
     }
 
     const formValue = this.editTaskForm.value;
-
-    const startDateFormatted = this.formatDateToDDMMYYYY(formValue.startDate);
-    const endDateFormatted = this.formatDateToDDMMYYYY(formValue.endDate);
+    const formatDate = (date: Date) => format(date, 'dd/MM/yyyy');
 
     const updateData: UpdateTaskDTO = {
       id: this.data.task.id,
       name: this.editTaskForm.value.name,
-      startDate: startDateFormatted,
-      endDate: endDateFormatted,
+      startDate: formatDate(this.editTaskForm.value.startDate),
+      endDate: formatDate(this.editTaskForm.value.endDate),
       projectId: +formValue.projectId,
       status: this.editTaskForm.value.status as StatusTask,
       collaborators: formValue.collaborators,
