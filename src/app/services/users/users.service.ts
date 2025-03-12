@@ -37,6 +37,25 @@ export class UsersService {
     return this.http.get<UserDTO[]>(this.apiUrl, { headers });
   }
 
+  // GET - Listar todos os usuários
+  getUsersAdmins(): Observable<UserDTO[]> {
+    const token = this.auth.getToken();
+
+    // Se não houver token, retorna um erro
+    if (!token) {
+      console.error('Não foi possível obter o token');
+    }
+
+    // Define os headers com o token
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/admins`;
+    return this.http.get<UserDTO[]>(url, { headers });
+  }
+
   // GET - Buscar usuário filtrado por ID
   getUserById(id: number): Observable<UserDTO> {
     const url = `${this.apiUrl}/${id}`;
