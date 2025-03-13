@@ -1,9 +1,8 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { environment } from '../../enviroments/enviroment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserDTO } from '../../DTO/users/userDTO';
-import { AddUserDTO } from '../../DTO/users/addUserDTO';
 import { User } from '../../models/users/user';
 import { AuthService } from '../authentication/auth.service';
 import { UserLoggedNameDTO } from '../../DTO/users/userLoggedNameDTO';
@@ -165,5 +164,4 @@ export class UsersService {
     const url = `${this.apiUrl}/total-tasks-by-user`;
     return this.http.get<any[]>(url, { headers });
   }
-
 }

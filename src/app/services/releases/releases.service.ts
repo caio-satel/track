@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../enviroments/enviroment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from '../authentication/auth.service';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ReleaseDTO } from '../../DTO/releases/releaseDTO';
 import { Release } from '../../models/releases/release';
@@ -12,28 +11,15 @@ import { UpdateReleaseDTO } from '../../DTO/releases/UpdateReleaseDTO';
   providedIn: 'root'
 })
 export class ReleasesService {
-private apiUrl = `${environment.api_URL}/releases`;
+  private apiUrl = `${environment.api_URL}/releases`;
 
   constructor(
-    private http: HttpClient,
-    private auth: AuthService
-  ) { }
+    private http: HttpClient
+  ) {}
 
-  // Crud Releases
   // GET - Listar todas as releases
   getReleases(): Observable<ReleaseDTO[]> {
-    const token = this.auth.getToken();
-
-    if (!token) {
-      console.error('Não foi possível obter o token');
-    }
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get<ReleaseDTO[]>(this.apiUrl, { headers });
+    return this.http.get<ReleaseDTO[]>(this.apiUrl);
   }
 
   // GET - Buscar release filtrada por ID
@@ -42,64 +28,32 @@ private apiUrl = `${environment.api_URL}/releases`;
     return this.http.get<ReleaseDTO>(url);
   }
 
-  // GET - Buscar release filtrada por user logged
+  // GET - Buscar releases do usuário logado
   getReleasesByUserLogged(): Observable<ReleaseDTO[]> {
-    const token = this.auth.getToken();
-
-    if (!token) {
-      console.error('Não foi possível obter o token');
-    }
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-
     const url = `${this.apiUrl}/byUser`;
-    return this.http.get<ReleaseDTO[]>(url, { headers });
+    return this.http.get<ReleaseDTO[]>(url);
   }
 
   // POST - Cadastrar release
   createRelease(release: CreateReleaseDTO): Observable<CreateReleaseDTO> {
-    const token = this.auth.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.post<CreateReleaseDTO>(this.apiUrl, release, { headers });
+    return this.http.post<CreateReleaseDTO>(this.apiUrl, release);
   }
 
   // PUT - Atualizar release
   updateRelease(id: number, release: UpdateReleaseDTO): Observable<UpdateReleaseDTO> {
-    const token = this.auth.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
     const url = `${this.apiUrl}/${id}`;
-    return this.http.put<UpdateReleaseDTO>(url, release, { headers });
+    return this.http.put<UpdateReleaseDTO>(url, release);
   }
 
   // DELETE - Deletar release
   deleteRelease(id: number): Observable<Release> {
-    const token = this.auth.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
     const url = `${this.apiUrl}/${id}`;
-    return this.http.delete<Release>(url, { headers });
+    return this.http.delete<Release>(url);
   }
 
+  // GET - Total de releases e horas lançadas pelo usuário
   totalReleasesAndHoursLaunchedByUser(): Observable<any[]> {
-    const token = this.auth.getToken();
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-
     const url = `${this.apiUrl}/user-launches`;
-    return this.http.get<any[]>(url, { headers });
+    return this.http.get<any[]>(url);
   }
 }

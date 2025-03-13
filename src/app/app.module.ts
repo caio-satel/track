@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from '../app/interceptor/auth.interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,7 +45,8 @@ import { CookieService } from 'ngx-cookie-service';
     provideAnimationsAsync(),
     provideHttpClient(withFetch()),
     CookieService,
-    [{provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}] // Configuração do locale do datepicker para o Brasil
+    [{provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}], // Configuração do locale do datepicker para o Brasil
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })
