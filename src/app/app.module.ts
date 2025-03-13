@@ -42,8 +42,8 @@ import { CookieService } from 'ngx-cookie-service';
     provideClientHydration(),
     provideAnimationsAsync(),
     provideHttpClient(withFetch()),
-    [{provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}],
-    CookieService // Configuração do locale do datepicker para o Brasil
+    CookieService,
+    [{provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}] // Configuração do locale do datepicker para o Brasil
   ],
   bootstrap: [AppComponent]
 })
