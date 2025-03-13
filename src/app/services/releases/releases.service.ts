@@ -90,4 +90,16 @@ private apiUrl = `${environment.api_URL}/releases`;
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<Release>(url, { headers });
   }
+
+  totalReleasesAndHoursLaunchedByUser(): Observable<any[]> {
+    const token = this.auth.getToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/user-launches`;
+    return this.http.get<any[]>(url, { headers });
+  }
 }

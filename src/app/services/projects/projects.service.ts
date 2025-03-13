@@ -66,4 +66,28 @@ private apiUrl = `${environment.api_URL}/projects`;
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<ProjectDTO>(url, { headers });
   }
+
+  totalHoursLaunchedByProjects30days(): Observable<any[]> {
+    const token = this.auth.getToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/total-hours-last-30-days`;
+    return this.http.get<any[]>(url, { headers });
+  }
+
+  countOngoingTasksByProjects(): Observable<any[]> {
+    const token = this.auth.getToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/ongoing-tasks`;
+    return this.http.get<any[]>(url, { headers });
+  }
 }

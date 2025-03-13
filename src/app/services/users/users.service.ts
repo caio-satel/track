@@ -128,4 +128,42 @@ export class UsersService {
 
     return this.http.patch<ChangePasswordDTO>(url, changePasswordData, { headers });
   }
+
+  // Reports
+  getTotalHoursByUser(): Observable<any[]> {
+    const token = this.auth.getToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/total-hours-by-user`;
+    return this.http.get<any[]>(url, { headers });
+  }
+
+  getTotalProjectsByUser(): Observable<any[]> {
+    const token = this.auth.getToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/total-projects-by-user`;
+    return this.http.get<any[]>(url, { headers });
+  }
+
+  getTotalTasksByUser(): Observable<any[]> {
+    const token = this.auth.getToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/total-tasks-by-user`;
+    return this.http.get<any[]>(url, { headers });
+  }
+
 }
