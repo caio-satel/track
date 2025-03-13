@@ -1,7 +1,7 @@
 :host {
   display: block;
   background-color: var(--bg-primary);
-  padding-bottom: 800px;
+  overflow: hidden;
 }
 
 .dashboard {
@@ -297,6 +297,10 @@ td {
   padding: 2px;
 }
 
+::ng-deep .light-theme .table-release-container table {
+  background-color: var(--bg-primary) !important;
+}
+
 .table-releases .tbl-container .button-delete:hover {
   color: rgb(238, 134, 134);
 }
@@ -313,4 +317,122 @@ td {
 
 ::ng-deep .light-theme .table-releases mat-paginator  {
   background-color: var(--bg-tertiary) !important;
+}
+
+@media (max-width: 1250px) {
+  div.container-table-project {
+    grid-template-columns: repeat(1, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 750px) {
+  .card-header .button-release {
+    font-size: .875rem;
+    padding: 10px;
+  }
+
+  .card-content ul,
+  .card-header {
+    padding: 0 10px;
+  }
+
+  .card-content ul li {
+    font-size: 1rem;
+  }
+
+  .hide-on-mobile {
+    display: none;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+
+  .tbl-container {
+    width: 100%;
+  }
+
+  th, td {
+    padding: 8px 16px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .container-limit-width .tbl-responsive {
+    overflow-x: auto;
+    width: 100%; /* Define a largura do container */
+  }
+
+  .table-releases .tbl-release-container {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .card-content ul li {
+    font-size: .875rem;
+  }
+
+  .card-content ul li mat-icon {
+    font-size: 1rem;
+  }
+
+  #btn-span-text-rg {
+    display: none;
+  }
+}
+
+@media (max-width: 550px) {
+  div.card-infos {
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+
+  .card-header mat-card-title {
+    font-size: 2rem;
+  }
+
+  .card-header .button-release {
+    padding: 5px;
+  }
+
+  .card-header .button-release span {
+    display: none;
+  }
+
+  .card-header .button-release mat-icon {
+    margin-right: 0;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+
+  div.container-table-project {
+    gap: 25px;
+    margin: 2rem 0;
+  }
+
+  .work-time {
+    margin-bottom: 40px;
+  }
+
+  .work-time span {
+    font-size: 1.2rem;
+  }
+
+  .work-time mat-icon {
+    font-size: 1.5rem;
+  }
+
+  .late-tasks {
+    margin-bottom: 40px;
+  }
+
+  .late-tasks span {
+    font-size: 1rem;
+  }
+
 }
