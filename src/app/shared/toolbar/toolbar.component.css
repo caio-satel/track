@@ -92,11 +92,17 @@ mat-toolbar {
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .toolbar-nav {
     display: none;
   }
   .btn-menu {
     display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .logo {
+    display: none;
   }
 }

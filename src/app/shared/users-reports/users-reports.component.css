@@ -1,0 +1,31 @@
+.charts-container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(300px, 1fr));
+  gap: 20px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+
+.chart {
+  max-width: 100%; /* Limita a largura de cada gráfico */
+  height: 400px; /* Define uma altura fixa para os gráficos */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px; /* Borda arredondada opcional */
+  border: 1px solid #7c7c7c; /* Borda padrão opcional */
+  padding: 10px; /* Espaçamento interno opcional */
+}
+
+@media (max-width: 1500px) {
+  .charts-container {
+    grid-template-columns: repeat(2, minmax(300px, 1fr)); /* 2 colunas */
+  }
+}
+
+@media (max-width: 1200px) {
+  .charts-container {
+    grid-template-columns: repeat(1, minmax(300px, 1fr)); /* 1 coluna */
+  }
+}

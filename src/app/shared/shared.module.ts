@@ -15,12 +15,20 @@ import { ChangePasswordDialogComponent } from './change-password-dialog/change-p
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { UsersReportsComponent } from './users-reports/users-reports.component';
+import { ProjectsReportsComponent } from './projects-reports/projects-reports.component';
+import { TasksReportsComponent } from './tasks-reports/tasks-reports.component';
+import { ReleasesReportsComponent } from './releases-reports/releases-reports.component';
 
 @NgModule({
   declarations: [
     ToolbarComponent,
     ConfirmDialogComponent,
-    ChangePasswordDialogComponent
+    ChangePasswordDialogComponent,
+    UsersReportsComponent,
+    ProjectsReportsComponent,
+    TasksReportsComponent,
+    ReleasesReportsComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +50,13 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule
   ],
   exports: [
-    ToolbarComponent, ConfirmDialogComponent, MatDialogModule
+    ToolbarComponent,
+    UsersReportsComponent,
+    ConfirmDialogComponent,
+    ProjectsReportsComponent,
+    TasksReportsComponent,
+    ReleasesReportsComponent,
+    MatDialogModule
   ]
 })
 export class SharedModule { }
