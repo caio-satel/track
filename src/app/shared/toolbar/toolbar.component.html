@@ -8,13 +8,13 @@
       }
     </a>
 
-    <mat-icon class="btn-menu" fontIcon="menu">
-      <span>Menu</span>
-    </mat-icon>
+    <mat-icon class="btn-menu" fontIcon="menu" (click)="toggleMenu()" *ngIf="!isMenuOpen"></mat-icon>
+    <mat-icon class="btn-close-menu" fontIcon="close" (click)="toggleMenu()" *ngIf="isMenuOpen"></mat-icon>
   </div>
 
   @if (userLogged?.role === 'ADMIN') {
-    <mat-list class="toolbar-nav">
+    <mat-list class="toolbar-nav" [class.active]="isMenuOpen">
+      <li><a routerLink="/dashboard">Dashboard</a></li>
       <li><a routerLink="/users">Usuários</a></li>
       <li><a routerLink="/projects">Projetos</a></li>
       <li><a routerLink="/tasks">Atividades</a></li>

@@ -1,55 +1,57 @@
 <mat-card class="mat-elevation-z8">
   <div class="actions-user">
     <button class="button-add" mat-raised-button (click)="openFormDialog('200ms', '200ms')">Novo Usuário</button>
-    <mat-form-field>
+    <mat-form-field class="search-input">
       <mat-label>Procure</mat-label>
       <input matInput placeholder="Nome ou E-mail" (input)="search($event)">
     </mat-form-field>
   </div>
 
-  <table class="tbl-container" mat-table [dataSource]="dataSource" matSort>
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome </th>
-      <td mat-cell *matCellDef="let users"> {{ users.name }} </td>
-    </ng-container>
+  <div class="tbl-responsive">
+    <table class="tbl-container" mat-table [dataSource]="dataSource" matSort>
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome </th>
+        <td mat-cell *matCellDef="let users"> {{ users.name }} </td>
+      </ng-container>
 
-    <!-- Email Column -->
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> E-mail </th>
-      <td mat-cell *matCellDef="let users"> {{ users.email }} </td>
-    </ng-container>
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> E-mail </th>
+        <td mat-cell *matCellDef="let users"> {{ users.email }} </td>
+      </ng-container>
 
-    <!-- Perfil Column -->
-    <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Perfil </th>
-      <td mat-cell *matCellDef="let users">
-        <mat-chip-set>
-          @if (users.role === 'ADMIN') {
-            <mat-chip class="admin-chip"> Administrador </mat-chip>
-          } @else {
-            <mat-chip class="user-chip"> Colaborador </mat-chip>
-          }
-        </mat-chip-set>
-      </td>
-    </ng-container>
+      <!-- Perfil Column -->
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Perfil </th>
+        <td mat-cell *matCellDef="let users">
+          <mat-chip-set>
+            @if (users.role === 'ADMIN') {
+              <mat-chip class="admin-chip"> Administrador </mat-chip>
+            } @else {
+              <mat-chip class="user-chip"> Colaborador </mat-chip>
+            }
+          </mat-chip-set>
+        </td>
+      </ng-container>
 
-    <!-- Actions Column -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Ações </th>
-      <td mat-cell *matCellDef="let users">
-        <button class="button-edit" mat-mini-fab  (click)="openEditDialog(users, '200ms', '200ms')">
-          <mat-icon fontIcon="edit"></mat-icon>
-        </button>
-        <button mat-mini-fab color="warn" (click)="openDeleteDialog(users.id, '200ms', '200ms')">
-          <mat-icon fontIcon="delete"></mat-icon>
-        </button>
-      </td>
-    </ng-container>
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Ações </th>
+        <td mat-cell *matCellDef="let users">
+          <button class="button-edit" mat-mini-fab  (click)="openEditDialog(users, '200ms', '200ms')">
+            <mat-icon fontIcon="edit"></mat-icon>
+          </button>
+          <button mat-mini-fab color="warn" (click)="openDeleteDialog(users.id, '200ms', '200ms')">
+            <mat-icon fontIcon="delete"></mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    </table>
+  </div>
 
   <mat-paginator  [length]="dataSource.data.length"
                   [pageSize]="10"

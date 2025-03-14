@@ -27,7 +27,8 @@ export class TasksService {
 
   // GET - Listar todas as tarefas atrasadas do usuário logado
   getLateTasksByUser(): Observable<TaskDTO[]> {
-    return this.http.get<TaskDTO[]>(`${this.apiUrl}/late-tasks`);
+    const url = `${this.apiUrl}/late-tasks`;
+    return this.http.get<TaskDTO[]>(url);
   }
 
   // GET - Buscar task filtrada por ID

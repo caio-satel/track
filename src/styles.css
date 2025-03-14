@@ -25,6 +25,11 @@
   padding: 0;
 }
 
+body {
+  width: 100%;
+  height: 100%;
+}
+
 .snack-success {
   outline: 2px solid #4caf50;
   border-radius: 4px;

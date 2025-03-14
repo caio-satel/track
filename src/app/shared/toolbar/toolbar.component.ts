@@ -20,6 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ToolbarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   changePassword: ChangePasswordDTO = { currentPassword: '', newPassword: '' };
+  isMenuOpen = false;
 
   constructor(
     private dialog: MatDialog,
@@ -36,6 +37,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscribeTheme();
     this.getUserLogged();
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   subscribeTheme():void {

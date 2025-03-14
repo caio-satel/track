@@ -14,10 +14,20 @@ button.button-add {
   background-color: var(--secondary-color);
 }
 
+.tbl-responsive {
+  overflow-x: auto;
+}
+
 .tbl-container {
   background-color: var(--bg-primary);
   border-radius: 10px 10px 0 0;
   overflow: hidden;
+}
+
+th, td {
+  padding: 8px 16px;
+  text-align: left;
+  white-space: nowrap;
 }
 
 th {
@@ -65,4 +75,10 @@ mat-chip.paused-chip {
 
 mat-chip.done-chip {
   background-color: #8bc34a;
+}
+
+@media (max-width: 600px) {
+  .search-input {
+    max-width: 150px;
+  }
 }
