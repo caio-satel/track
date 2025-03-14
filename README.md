@@ -1,27 +1,80 @@
-# Track
+# ⏰ TrackHours - Frontend (Angular)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+O **TrackHours** é a interface web desenvolvida com **Angular** para o sistema de gestão de horas trabalhadas. A aplicação permite o registro e visualização das horas trabalhadas por projeto e atividades gerando gráficos e relatórios para facilitar o acompanhamento das atividades dos usuários. Controle total da aplicação por parte dos administradores e usuário tem acesso restrito à dashboard.
 
-## Development server
+Este frontend faz parte do sistema TrackHours e depende do backend desenvolvido com Spring Boot.
+Para obter o backend da aplicação, acesse o repositório correspondente:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+[Backend Trackhours](https://github.com/caio-satel/trackhours)
 
-## Code scaffolding
+Certifique-se de rodar o backend antes de iniciar o frontend para que todas as funcionalidades estejam disponíveis.
+--
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 🚀 **Funcionalidades**
 
-## Build
+- Registro de horas trabalhadas vinculadas a atividades e projetos.
+- Visualização de gráficos com horas totais por projeto, atividades ou usuários.
+- Dashboard dinâmica com informações gerais de projetos e atividades do usuário.
+- Autenticação e controle de acesso utilizando **Token JWT**.
+- Interface amigável e responsiva.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+--
 
-## Running unit tests
+## 🛠️ **Tecnologias Utilizadas**
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **Angular 17** - Framework principal, utilizando Angular Material para componentes UI.
+- **Chart.js** - Exibição de gráficos dinâmicos.
+- **HTML5 e CSS3** - Interface de usuário.
+- **TypeScript** - Desenvolvimento com tipagem estática.
 
-## Running end-to-end tests
+--
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## 📂 **Estrutura do Projeto**
 
-## Further help
+```
+src/
+├── app/
+│   ├── DTO/              # Objetos de Transferência de Dados
+│   ├── environments/     # Configurações de ambiente
+│   ├── guards/           # Guardas de rotas
+│   ├── interceptor/      # Interceptadores de requisições
+│   ├── models/           # Modelos de dados
+│   ├── modules/          # Módulos específicos da aplicação
+│   ├── services/         # Serviços para comunicação com o backend
+│   └── shared/           # Componentes e funcionalidades compartilhadas
+└── assets/               # Recursos estáticos (imagens, estilos)
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+---
+
+## 📝 **Pré-requisitos**
+
+- **Node.js 20** e **npm 10** instalados.
+- **Angular CLI** para rodar o projeto.
+
+--
+
+## 💻 **Instalação e Execução**
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/caio-satel/track.git
+   cd track
+   ```
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Execute o servidor:
+   ```bash
+   ng serve
+   ```
+4. Acesse a aplicação:
+   ```
+   http://localhost:4200
+   ```
+
+--
+
+### Aproveita a aplicação
+
